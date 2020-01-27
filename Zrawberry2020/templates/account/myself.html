@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}个人信息{% endblock %}
+
+{% block content %}
+    <div class="row text-center vertical-middle-sm">
+
+        <h1>个人信息</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>用户名:</span></div>
+                    <div class="col-md-8 text-left">{{ user.username }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>生日:</span></div>
+                    <div class="col-md-8 text-left">{{ userprofile.birth }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>邮箱:</span></div>
+                    <div class="col-md-8 text-left">{{ user.email }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>微信:</span></div>
+                    <div class="col-md-8 text-left">{{ userprofile.wechat }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>毕业学校:</span></div>
+                    <div class="col-md-8 text-left">{{ userinfo.school }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>专业:</span></div>
+                    <div class="col-md-8 text-left">{{ userinfo.specialty }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>工作单位:</span></div>
+                    <div class="col-md-8 text-left">{{ userinfo.company }}</div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>地址:</span></div>
+                    <div class="col-md-8 text-left">{{ userinfo.address }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 text-right"><span>个人介绍:</span></div>
+                    <div class="col-md-8 text-left">{{ userinfo.aboutme }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                {% load static %}
+                <div style="margin-right:100px">
+                    {#                <img name="user_face" src="{% static 'image/newton.jpg' %}" class="img-circle" width="270px" id="my_photo">#}
+                    {% if userinfo.photo %}
+                        <img src="{{ userinfo.photo | striptags }}" class="img-circle" width="200px" id="my_photo" name="user_face">
+                    {% else %}
+                        <p>未上传头像</p><p>可在编辑页面中上传</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a href="{% url 'account:edit_my_information' %}">
+                    <button class="btn btn-primary btn-lg">编辑</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+{% endblock %}
