@@ -1,0 +1,91 @@
+{% extends "back_base.html" %}
+
+{% load static %}
+
+{% block title %}
+    网址导航管理
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% for LB in LBlist %}
+            <h3 style="display: inline-block;">盒子{{ forloop.counter }}: {{ LB.boxname }}</h3>
+            <p style="display: inline-block;">
+                <button id="LB{{ forloop.counter }}" onclick="add_url({{ LB.id }})" class="btn btn-primary">添加站点
+                </button>
+            </p>
+            <table class="table table-hover">
+                <tr>
+                    <td>序号</td>
+                    <td>站点名</td>
+                    <td>网址</td>
+                    <td>操作</td>
+                </tr>
+                {% for sitename,url in LB.str2dict.items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ sitename }}</td>
+                        <td><a href="{{ url }}">{{ url }}</a></td>
+                        <td>
+                            <a name="delete" href="javascript:" onclick="del_url(this, {{ LB.id }})">
+                                <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static "js/layer.js" %}"></script>
+    <script type="text/javascript">
+        function add_url(boxid) {
+            var index = layer.open({
+                type: 1,
+                skin: "layui-layer-rim",
+                area: ["400px", "300px"],
+                title: "新增站点",
+                content: '<div class="text-center" style="margin-top:20px"> ' +
+                    '<label>{{ LinkForm.sitename.label }}</label> ' +
+                    '<p>{{ LinkForm.sitename }}</p>' +
+                    '<label>{{ LinkForm.url.label }}</label>' +
+                    '<p>{{ LinkForm.url }}</p></div>',
+                btn: ['添加', '取消'],
+                yes: function (index, layero) {
+                    sitename = $('#id_sitename').val();
+                    siteurl = $('#id_url').val();
+                    $.ajax({
+                        url: '{% url "navigation:navigation_list" %}',
+                        type: 'POST',
+                        data: {"op":"add_url","box_id": boxid, "sitename": sitename, "url": siteurl},
+                        success: function (e) {
+                            if (e == "1") {
+                                parent.location.reload();
+                                layer.msg("添加成功");
+                            } else {
+                                layer.msg("添加失败")
+                            }
+                        },
+                    });
+                },
+            });
+        }
+
+        function del_url(current,boxid) {
+            var sitename = $(current).parents('tr').children('td').eq(1).text();
+            $.ajax({
+                url: '{% url "navigation:navigation_list" %}',
+                type: "POST",
+                data: {"op":"del_url","box_id": boxid, "sitename":sitename},
+                success: function (e) {
+                    if (e == "1") {
+                        parent.location.reload();
+                    } else {
+                        layer.msg("删除失败");
+                    }
+                },
+            })
+        }
+    </script>
+{% endblock %}

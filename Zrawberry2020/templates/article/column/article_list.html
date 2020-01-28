@@ -34,10 +34,10 @@
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
 <script type="text/javascript" src="{% static 'js/layer.js'%}"></script>
 <script type="text/javascript">
     function del_article(the, article_id){
+        // 获取文章的名字
         var article_name = $(the).parents("tr").children("td").eq(1).text();
         layer.open({
             type: 1,

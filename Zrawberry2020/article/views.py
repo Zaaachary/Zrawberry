@@ -11,7 +11,7 @@ from .forms import ArticleColumnForm, ArticlePostForm
 
 
 # @permission_required()
-@login_required()
+@login_required
 @csrf_exempt
 def article_column(request):
     if request.method == "GET":

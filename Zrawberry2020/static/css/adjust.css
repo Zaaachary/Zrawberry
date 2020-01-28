@@ -1,0 +1,15 @@
+
+body {
+    padding-top: 60px;
+}
+
+.context .LinkBox ul li {
+    width: 80px;
+    height: 40px;
+    float: left;
+    list-style: none;
+    line-height: 40px;
+    text-align: center;
+    font-size: 13px;
+    font-family: 微软雅黑;
+}

@@ -1,19 +1,21 @@
 {% load static %}
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}{% endblock %}</title>
+
+    <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon"/>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'css/adjust.css' %}">
+    {% block css %}{% endblock %}
 </head>
 <body>
+{% include 'back_header.html' %}
 <div class="container">
-    {% include 'back_header.html' %}
-{#    {% include 'header.html' %}#}
     <div class="col-md-3">
         {% include 'leftslider.html' %}
     </div>
@@ -22,10 +24,12 @@
         {% endblock %}
     </div>
     <div class="col-md-12">
-    {% include 'footer.html' %}
+        {% include 'footer.html' %}
     </div>
 </div>
 
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
 {% block javascript %}
 {% endblock %}
 </body>

@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 from article import views
-from navigation import views as v2
 
 urlpatterns = [
     path('', views.article_titles),
     path('admin/', admin.site.urls),
     path('account/', include('account.urls', namespace='account')),
     path('blog/', include('article.urls', namespace='article')),
-    path('navigation/', v2.navigation_index, name='navigation'),
+    path('navigation/', include('navigation.urls', namespace='navigation')),
 ]
