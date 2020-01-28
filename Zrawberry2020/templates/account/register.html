@@ -3,48 +3,51 @@
 {% load static %}
 
 {% block title %}
-用户注册
+    用户注册
 {% endblock %}
 
 {% block content %}
-<div class="row text-center vertical-middle-sm">
-    <h1>注册</h1>
-    <p>已有账号？ 点击<a href="{% url 'account:user_login' %}">登录</a></p>
-    <p>忘记用户名或者密码？点击 <a href="{% url 'account:password_reset' %}">重置</a></p>
-    <form class="form-horizontal" action="." method="post">{% csrf_token %}
-        <div class="form-group">
-            <label for="{{ form.username.id_for_label }}" class="col-md-5 control-label">用户名</label>
-            <div class="col-md-6 text-left">{{ form.username }}</div>
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.email.id_for_label }}" class="col-md-5 control-label">邮箱</label>
-            <div class="col-md-6 text-left">{{ form.email }}</div>
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.password.id_for_label }}" class="col-md-5 control-label">密码</label>
-            <div class="col-md-6 text-left">{{ form.password1 }}</div>
-        </div>
-
-        <div class="form-group">
-            <label for="{{ form.password.id_for_label }}" class="col-md-5 control-label">再次确认</label>
-            <div class="col-md-6 text-left">{{ form.password2 }}</div>
-        </div>
-
-        <div class="form-group">
-            <label for="{{ profile.birth.id_for_label }}" class="col-md-5 control-label">生日(可选)</label>
-            <div class="col-md-6 text-left">{{ profile.birth }}</div>
-        </div>
-
-        <div class="form-group">
-            <label for="{{ profile.website.id_for_label }}" class="col-md-5 control-label">微信号(可选)</label>
-            <div class="col-md-6 text-left">{{ profile.wechat }}</div>
-        </div>
+    <div class="row text-center">
+        <h1>注册</h1>
+        <p>已有账号？ 点击<a href="{% url 'account:user_login' %}">登录</a></p>
+        <p>忘记用户名或者密码？点击 <a href="{% url 'account:password_reset' %}">重置</a></p>
 
 
-        <input type="submit" class="btn btn-primary btn-lg" value="注册">
-    </form>
-</div>
+        <form class="form-horizontal col-md-offset-3 col-md-6" action="." method="post">{% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">用户名(账号)</label>
+                <div class="col-md-9 text-left">{{ form.username }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}" class="col-sm-3 control-label">邮箱</label>
+                <div class="col-md-9 text-left">{{ form.email }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">密码</label>
+                <div class="col-md-9 text-left">{{ form.password1 }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">再次确认</label>
+                <div class="col-md-9 text-left">{{ form.password2 }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile.birth.id_for_label }}" class="col-sm-3 control-label">生日(可选)</label>
+                <div class="col-md-9 text-left">{{ profile.birth }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ profile.website.id_for_label }}" class="col-sm-3 control-label">微信号(可选)</label>
+                <div class="col-md-9 text-left">{{ profile.wechat }}</div>
+            </div>
+
+
+            <input type="submit" class="btn btn-primary btn-lg" value="注册">
+        </form>
+    </div>
+
 
 {% endblock %}

@@ -24,4 +24,13 @@ class LinkBox(models.Model):
             return None
 
     def str2dict(self):
-        return eval(self.urls)
+        if self.urls:
+            return eval(self.urls)
+        else:
+            return {}
+
+    def urls_num(self):
+        if self.urls:
+            return len(self.str2dict())
+        else:
+            return 0

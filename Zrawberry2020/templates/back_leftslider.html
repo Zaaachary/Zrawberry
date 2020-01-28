@@ -1,0 +1,14 @@
+{% if user.is_staff %}
+<div class="list-group">
+    <h4 class="list-group-item">博客</h4>
+    <a href="{% url 'article:article_column' %}" class="list-group-item {{ column }}">栏目</a>
+    <a href="{% url 'article:article_list' %}" class="list-group-item {{ list }}">列表</a>
+    <a href="{% url 'article:article_post' %}" class="list-group-item {{ post }}">发布</a>
+</div>
+{% endif %}
+
+<div class="list-group">
+    <h4 class="list-group-item">网址导航</h4>
+    <a href="{% url 'navigation:navigation_box' %}" class="list-group-item {{ boxes }}">站点类型（盒子）</a>
+    <a href="{% url 'navigation:navigation_list' %}" class="list-group-item {{ links }}">站点编辑</a>
+</div>

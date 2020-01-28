@@ -8,32 +8,38 @@
 
 {% block content %}
     <div>
-        {% for LB in LBlist %}
-            <h3 style="display: inline-block;">盒子{{ forloop.counter }}: {{ LB.boxname }}</h3>
-            <p style="display: inline-block;">
-                <button id="LB{{ forloop.counter }}" onclick="add_url({{ LB.id }})" class="btn btn-primary">添加站点
-                </button>
-            </p>
-            <table class="table table-hover">
-                <tr>
-                    <td>序号</td>
-                    <td>站点名</td>
-                    <td>网址</td>
-                    <td>操作</td>
-                </tr>
-                {% for sitename,url in LB.str2dict.items %}
+        {% if LBlist %}
+            {% for LB in LBlist %}
+                <h3 style="display: inline-block;">盒子{{ forloop.counter }}: {{ LB.boxname }}</h3>
+                <p style="display: inline-block;">
+                    <button onclick="add_url({{ LB.id }})" class="btn btn-primary">添加站点
+                    </button>
+                </p>
+                <table class="table table-hover">
                     <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ sitename }}</td>
-                        <td><a href="{{ url }}">{{ url }}</a></td>
-                        <td>
-                            <a name="delete" href="javascript:" onclick="del_url(this, {{ LB.id }})">
-                                <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a>
-                        </td>
+                        <td>序号</td>
+                        <td>站点名</td>
+                        <td>网址</td>
+                        <td>操作</td>
                     </tr>
-                {% endfor %}
-            </table>
-        {% endfor %}
+                    {% for sitename,url in LB.str2dict.items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ sitename }}</td>
+                            <td><a href="{{ url }}">{{ url }}</a></td>
+                            <td>
+                                <a name="delete" href="javascript:" onclick="del_url(this, {{ LB.id }})">
+                                    <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+        {% else %}
+            <h1>请先添加盒子！</h1>
+            <p>盒子是站点存放的容器，先建立盒子然后再将站点添加到盒子内。</p>
+        {% endif %}
+
     </div>
 {% endblock %}
 
@@ -58,7 +64,7 @@
                     $.ajax({
                         url: '{% url "navigation:navigation_list" %}',
                         type: 'POST',
-                        data: {"op":"add_url","box_id": boxid, "sitename": sitename, "url": siteurl},
+                        data: {"op": "add_url", "box_id": boxid, "sitename": sitename, "url": siteurl},
                         success: function (e) {
                             if (e == "1") {
                                 parent.location.reload();
@@ -72,12 +78,12 @@
             });
         }
 
-        function del_url(current,boxid) {
+        function del_url(current, boxid) {
             var sitename = $(current).parents('tr').children('td').eq(1).text();
             $.ajax({
                 url: '{% url "navigation:navigation_list" %}',
                 type: "POST",
-                data: {"op":"del_url","box_id": boxid, "sitename":sitename},
+                data: {"op": "del_url", "box_id": boxid, "sitename": sitename},
                 success: function (e) {
                     if (e == "1") {
                         parent.location.reload();

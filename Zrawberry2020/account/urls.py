@@ -6,6 +6,7 @@ app_name = "account"
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='account/login2.html'), name='user_login'),
+    # path('login/', views.user_login, name='user_login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='account/logout.html'), name='user_logout'),
     path('register/', views.register, name='user_register'),
     # 修改密码
@@ -41,5 +42,6 @@ urlpatterns = [
          name='password_reset_complete'),
     path('my-information/', views.myself, name="my_information"),
     path('edit-my-information/', views.myself_edit, name="edit_my_information"),
-    path('my-image/', views.my_image, name="my_image")
+    path('my-image/', views.my_image, name="my_image"),
+    path('dashboard/', views.dashboard, name="dashboard"),
 ]

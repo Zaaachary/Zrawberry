@@ -19,7 +19,8 @@ def article_column(request):
         column_form = ArticleColumnForm()
         context = {
             "columns": columns,
-            "column_form": column_form
+            "column_form": column_form,
+            "column": 'active',
         }
         return render(request, "article/column/article_column.html", context=context)
 
@@ -94,7 +95,8 @@ def article_post(request):
         context = {
             "article_post_form": article_post_form,
             "article_columns": article_columns,
-            # "article_tags": article_tags
+            # "article_tags": article_tags,
+            "post": 'active',
 
         }
         return render(request, "article/column/article_post.html", context=context)
@@ -118,7 +120,8 @@ def article_list(request):
         articles = current_page.object_list
     context = {
         "articles": articles,
-        "page": current_page
+        "page": current_page,
+        "list": 'active',
     }
     return render(request, "article/column/article_list.html", context=context)
 
@@ -185,11 +188,16 @@ def article_titles(request):
         articles = current_page.object_list
     context = {
         "articles": articles,
-        "page": current_page
+        "page": current_page,
+        "blog": 'active',
     }
     return render(request, "article/front/article_titles.html", context=context)
 
 
 def article_content(request, id, slug):
     article = get_object_or_404(ArticlePost, id=id, slug=slug)
-    return render(request, "article/front/article_content.html", {"article": article})
+    context = {
+        "article": article,
+        "blog": 'active',
+    }
+    return render(request, "article/front/article_content.html", context=context)

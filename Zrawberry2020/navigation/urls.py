@@ -6,5 +6,6 @@ app_name = "navigation"
 
 urlpatterns = [
     path('', views.navigation_index, name="navigation_index"),
-    path('navigation-list', views.navigation_list, name="navigation_list")
+    path('navigation-link/', views.navigation_list, name="navigation_list"),
+    path('navigation-box/', views.navigation_box, name="navigation_box"),
 ]

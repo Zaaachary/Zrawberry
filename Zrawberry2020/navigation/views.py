@@ -9,22 +9,24 @@ from .forms import LinkForm
 
 
 def navigation_index(request):
+    context = {}
     if request.user.is_authenticated:
         if hasattr(request.user, "LinkBox"):
-            context = {
-                'LBlist': request.user.LinkBox.all()
-            }
+            context['LBlist'] = request.user.LinkBox.all()
+    context['navigation'] = 'active'
     return render(request, "navigation/front/nav_index.html", context=context)
 
 
 @login_required
 @csrf_exempt
 def navigation_list(request):
+    """盒子内的链接"""
     if request.method == 'GET':
         LBlist = request.user.LinkBox.all()
         context = {
             'LBlist': LBlist,
             'LinkForm': LinkForm,
+            'links': 'active',
         }
         return render(request, "navigation/back/nav_list.html", context=context)
     elif request.method == "POST":
@@ -57,3 +59,33 @@ def navigation_list(request):
             except:
                 return HttpResponse("2")
 
+
+@login_required
+@csrf_exempt
+def navigation_box(request):
+    if request.method == 'GET':
+        LBlist = request.user.LinkBox.all()
+        context = {
+            'LBlist': LBlist,
+            'boxes': 'active',
+        }
+        return render(request, "navigation/back/nav_box.html", context=context)
+    elif request.method == "POST":
+        if request.POST['op'] == "add_box":
+            # 添加盒子
+            boxname = request.POST['boxname']
+            if type(boxname) is str and len(boxname)>0:
+                box = LinkBox(boxname=boxname, owner_id=request.user.id)
+                box.save()
+                return HttpResponse('1')
+            else:
+                return HttpResponse('2')
+        elif request.POST['op'] == "del_box":
+            # 删除盒子
+            box_id = request.POST['boxid']
+            box = LinkBox.objects.get(owner_id=request.user.id, id=box_id)
+            try:
+                box.delete()
+                return HttpResponse("1")
+            except:
+                return HttpResponse("2")

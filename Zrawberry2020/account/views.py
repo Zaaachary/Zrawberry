@@ -16,7 +16,6 @@ def user_login(request):
             user = authenticate(username=cd['username'], password=cd['password'])
             if user:  # 如果检验正确则未一个user实例 否则None
                 login(request, user)
-                return HttpResponse("认证成功，欢迎！")
             else:
                 return HttpResponse("用户名不存在或密码错误")
         else:
@@ -114,7 +113,7 @@ def myself_edit(request):
         return render(request, "account/myself_edit.html", context=context)
 
 
-@login_required()
+@login_required
 @xframe_options_exempt
 def my_image(request):
     if request.method == 'POST':
@@ -127,3 +126,8 @@ def my_image(request):
         return HttpResponse("1")
     else:
         return render(request, 'account/imagecrop.html')
+
+
+@login_required
+def dashboard(request):
+    return render(request, 'back_base.html')
