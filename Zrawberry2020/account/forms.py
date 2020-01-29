@@ -22,10 +22,10 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ("username", "email")
 
-    def __init__(self, *args, **kwargs):
-        super(RegistrationForm, self).__init__(*args, **kwargs)
-        for v in self.fields.values():
-            v.widget.attrs.update({'class': 'form-control'})
+    # def __init__(self, *args, **kwargs):
+    #     super(RegistrationForm, self).__init__(*args, **kwargs)
+    #     for v in self.fields.values():
+    #         v.widget.attrs.update({'class': 'form-control'})
 
 
     def clean_password2(self):
@@ -44,10 +44,10 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ("wechat", "birth")
 
-    def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
-        for v in self.fields.values():
-            v.widget.attrs.update({'class': 'form-control'})
+    # def __init__(self, *args, **kwargs):
+    #     super(UserProfileForm, self).__init__(*args, **kwargs)
+    #     for v in self.fields.values():
+    #         v.widget.attrs.update({'class': 'form-control'})
 
 
 class UserInfoForm(forms.ModelForm):
@@ -55,10 +55,10 @@ class UserInfoForm(forms.ModelForm):
         model = UserInfo
         exclude = ['user']
 
-    def __init__(self, *args, **kwargs):
-        super(UserInfoForm, self).__init__(*args, **kwargs)
-        for v in self.fields.values():
-            v.widget.attrs.update({'class': 'form-control'})
+    # def __init__(self, *args, **kwargs):
+    #     super(UserInfoForm, self).__init__(*args, **kwargs)
+    #     for v in self.fields.values():
+    #         v.widget.attrs.update({'class': 'form-control'})
 
 
 class UserForm(forms.ModelForm):

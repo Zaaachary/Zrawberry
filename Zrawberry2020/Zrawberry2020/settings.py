@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+
         },
     },
 ]
@@ -128,7 +129,7 @@ STATICFILES_DIRS = (
 
 
 
-LOGIN_REDIRECT_URL = '/blog/'
+LOGIN_REDIRECT_URL = '/account/dashboard/'
 LOGIN_URL = '/account/login/'
 
 EMAIL_HOST = 'smtp.163.com'

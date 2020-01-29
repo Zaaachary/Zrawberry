@@ -10,11 +10,12 @@
     <div>
         {% if LBlist %}
             {% for LB in LBlist %}
-                <h3 style="display: inline-block;">盒子{{ forloop.counter }}: {{ LB.boxname }}</h3>
-                <p style="display: inline-block;">
-                    <button onclick="add_url({{ LB.id }})" class="btn btn-primary">添加站点
+                <form class="form-inline">
+                    <label><h4>{{ LB.boxname }}</h4></label>
+                    <button type="button" onclick="add_url({{ LB.id }})"
+                            class="btn btn-link">添加网址
                     </button>
-                </p>
+                </form>
                 <table class="table table-hover">
                     <tr>
                         <td>序号</td>
@@ -29,7 +30,7 @@
                             <td><a href="{{ url }}">{{ url }}</a></td>
                             <td>
                                 <a name="delete" href="javascript:" onclick="del_url(this, {{ LB.id }})">
-                                    <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a>
+                                    <span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         </tr>
                     {% endfor %}
