@@ -24,7 +24,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                    <li class="dropdown">
+                    <li class="dropdown {{ account }}">
                         <a href="#" class="dropdown-toggle {{ account }}" data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false">
                             {{ user.username }} <span class="caret"></span>

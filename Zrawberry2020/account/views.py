@@ -64,7 +64,8 @@ def myself(request):
         userinfo = UserInfo.objects.create(user=request.user)
     context = {"user": request.user,
                "userinfo": userinfo,
-               "userprofile": userprofile
+               "userprofile": userprofile,
+               "account": 'active',
                }
     return render(request, "account/myself.html", context=context)
 
@@ -98,7 +99,7 @@ def myself_edit(request):
     else:
         user_form = UserForm(instance=request.user)
         userprofile_form = UserProfileForm(initial={"birth": userprofile.birth,
-                                                    "wechat":userprofile.wechat})
+                                                    "wechat": userprofile.wechat})
         userinfo_form = UserInfoForm(initial={"school": userinfo.school,
                                               "company": userinfo.company,
                                               "specialty": userinfo.specialty,
@@ -108,7 +109,8 @@ def myself_edit(request):
             "user_form": user_form,
             "userinfo_form": userinfo_form,
             "userprofile_form": userprofile_form,
-            "userinfo": userinfo
+            "userinfo": userinfo,
+            "account": 'active',
         }
         return render(request, "account/myself_edit.html", context=context)
 
@@ -130,4 +132,4 @@ def my_image(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'back_base.html')
+    return render(request, 'back_base.html', context={"account": 'active', })
