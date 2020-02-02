@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login  # 内置的用户认证和管理
 from django.contrib.auth.decorators import login_required
@@ -40,9 +41,9 @@ def register(request):
             new_profile = userprofile_form.save(commit=False)
             new_profile.user = new_user
             new_profile.save()
-            return HttpResponse("成功")
+            return HttpResponseRedirect(reverse("account:user_login"))
         else:
-            return HttpResponse("注册失败")
+            return HttpResponse("注册失败，用户名或邮箱已经被使用 或 两次密码不一致！请重新<a href="+reverse("account:user_register")+'>注册</a>')
     else:
         user_form = RegistrationForm()
         userprofile_form = UserProfileForm()

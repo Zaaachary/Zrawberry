@@ -15,6 +15,7 @@
         </textarea>
         </div>
     </div>
+
     <div class="col-md-3">
         <h1>侧边栏</h1>
     </div>
@@ -32,7 +33,7 @@
     <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
     <script type="text/javascript">
         $(function () {
-            editormd.markdownToHTML("editormd-view", {
+            var view0 = editormd.markdownToHTML("editormd-view", {
                 htmlDecode: "style, script, iframe",
                 emoji: true,
                 taskList: true,

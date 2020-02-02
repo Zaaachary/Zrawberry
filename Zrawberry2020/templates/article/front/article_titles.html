@@ -12,16 +12,21 @@
 {% block content %}
     <div class="col-md-9">
         {% for article in articles %}
-            <div class="jumbotron">
-                <a href="{{ article.get_url_path }}"><h3>{{ article.title }}</h3></a>
-                {#                <p>作者:<a href="">{{ article.author.username }}</a></p>#}
-                {#                <p>{{ article.body|slice:'70'| linebreaks }}</p>#}
-                <p>{{ article.body|slice:'90' }}...</p>
-                <p><a class="btn btn-primary" href="{{ article.get_url_path }}" role="button">详情</a></p>
+            <div id="markdown{{ forloop.counter }}">
+                <textarea style="display: none">
+{#<a href="{{ article.get_url_path }}"><h3>{{ article.title }}</h3></a>#}
+{#<p>作者:<a href="">{{ article.author.username }}</a></p>#}
+
+{{ article.body|slice:'90' }}
+
+<a href="{{ article.get_url_path }}">查看详细内容</a>
+                </textarea>
             </div>
+            <hr>
         {% endfor %}
         {% include "paginator.html" %}
     </div>
+
     <div class="col-md-3">
         <div class="list-group">
             <h3 href="#" class="list-group-item">文章归档</h3>
@@ -31,7 +36,28 @@
             <a href="#" class="list-group-item">Machine Learning</a>
         </div>
         <h3>声明</h3>
-        <p>本站系<mark>快刀切草莓君</mark>的个人网站，账号功能目前仅用于存储网址导航。</p>
-        <p>本站的博客仅<mark>快刀切草莓君</mark>可发文，其余用户仅可阅读和点赞。</p>
+        <p>本站系
+            <mark>快刀切草莓君</mark>
+            的个人网站，账号功能目前仅用于存储网址导航。
+        </p>
+        <p>本站的博客仅
+            <mark>快刀切草莓君</mark>
+            可发文，其余用户仅可阅读和点赞。
+        </p>
     </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src='{% static "editor/lib/marked.min.js" %}'></script>
+    <script src='{% static "editor/lib/prettify.min.js" %}'></script>
+    <script src='{% static "editor/editormd.js" %}'></script>
+    <script type="text/javascript">
+        $(function () {
+            var view = new Array(6);
+            for (i = 1; i < 6; i++) {
+                view[i] = editormd.markdownToHTML("markdown" + i, {htmlDecode: true,});
+            }
+        })
+    </script>
+
 {% endblock %}

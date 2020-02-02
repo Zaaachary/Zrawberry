@@ -16,33 +16,33 @@
 
         <form class="form-horizontal text-left" action="." method="post">{% csrf_token %}
             <div class="form-group">
-                <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">用户名(账号)</label>
-                <div class="col-md-6">{{ form.username|addclass:"form-control" }}</div>
+                <label for="{{ form.username.id_for_label }}" class="col-sm-4 control-label">用户名(账号)</label>
+                <div class="col-md-4">{{ form.username|addclass:"form-control" }}</div>
             </div>
 
             <div class="form-group">
-                <label for="{{ form.email.id_for_label }}" class="col-sm-3 control-label">邮箱</label>
-                <div class="col-md-6">{{ form.email|addclass:"form-control" }}</div>
+                <label for="{{ form.email.id_for_label }}" class="col-sm-4 control-label">邮箱</label>
+                <div class="col-md-4">{{ form.email|addclass:"form-control" }}</div>
             </div>
 
             <div class="form-group">
-                <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">密码</label>
-                <div class="col-md-6">{{ form.password1|addclass:"form-control" }}</div>
+                <label for="{{ form.password.id_for_label }}" class="col-sm-4 control-label">密码</label>
+                <div class="col-md-4">{{ form.password1|addclass:"form-control" }}</div>
             </div>
 
             <div class="form-group">
-                <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">再次确认</label>
-                <div class="col-md-6">{{ form.password2|addclass:"form-control" }}</div>
+                <label for="{{ form.password.id_for_label }}" class="col-sm-4 control-label">再次确认</label>
+                <div class="col-md-4">{{ form.password2|addclass:"form-control" }}</div>
             </div>
 
             <div class="form-group">
-                <label for="{{ profile.birth.id_for_label }}" class="col-sm-3 control-label">生日(可选)</label>
-                <div class="col-md-6">{{ profile.birth|addclass:"form-control" }}</div>
+                <label for="{{ profile.birth.id_for_label }}" class="col-sm-4 control-label">生日(可选)</label>
+                <div class="col-md-4">{{ profile.birth|addclass:"form-control" }}</div>
             </div>
 
             <div class="form-group">
-                <label for="{{ profile.website.id_for_label }}" class="col-sm-3 control-label">微信号(可选)</label>
-                <div class="col-md-6">{{ profile.wechat|addclass:"form-control" }}</div>
+                <label for="{{ profile.website.id_for_label }}" class="col-sm-4 control-label">微信号(可选)</label>
+                <div class="col-md-4">{{ profile.wechat|addclass:"form-control" }}</div>
             </div>
 
             <div class="text-center">

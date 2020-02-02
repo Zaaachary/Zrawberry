@@ -27,7 +27,6 @@ class RegistrationForm(forms.ModelForm):
     #     for v in self.fields.values():
     #         v.widget.attrs.update({'class': 'form-control'})
 
-
     def clean_password2(self):
         """在调用is_valid()时会执行 clean_+属性名称()"""
         cd = self.cleaned_data
