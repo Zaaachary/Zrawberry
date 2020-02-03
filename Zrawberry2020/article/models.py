@@ -23,6 +23,7 @@ class ArticlePost(models.Model):
     body = models.TextField()
     created = models.DateTimeField(default=timezone.now)  # 时区的发布时间
     updated = models.DateTimeField(auto_now=True)
+    viewed = models.IntegerField(default=0)
 
     # users_like = models.ManyToManyField(User, related_name="articles_like", blank=True)
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)

@@ -13,6 +13,7 @@
                 <td>序号</td>
                 <td>标题</td>
                 <td>栏目</td>
+                <td>浏览量</td>
                 <td>操作</td>
             </tr>
             {% for article in articles %}
@@ -20,6 +21,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
                     <td>{{ article.column }}</td>
+                    <td>{{ article.viewed }}</td>
                     <td>
                         <a name="edit" href="{% url 'article:redit_article' article.id %}">
                             <span class="glyphicon glyphicon-pencil"></span></a>

@@ -1,26 +1,17 @@
-html {
-    height: 100%;
-}
+
 
 body {
     padding-top: 60px;
     background: rgb(236, 236, 236);
-
-    display: flex;
-    flex-direction: column;
     height: 100%;
 }
 
-body nav{
-    flex: 0 0 auto;
-}
 
 .content{
-    flex: 1 0 auto;
+    /*min-height: 500px;*/
 }
 
 body footer {
-    flex: 0 0 auto;
     background-color: white;
     margin-top: 50px;
 }

@@ -24,7 +24,7 @@
             <p>自定义的网址记录会和账号相关联, 随时随地仅需登录就可访问！</p>
             <p>体验具体功能请您先进行<a href="{% url 'account:user_login' %}">登录</a></p>
         </div>
-    {% elif LBlist %}
+    {% else %}
         <div class="row">
             {% for LB in LBlist %}
                 <div class="col-md-4" style="padding: 5px;">
@@ -41,12 +41,12 @@
                         </div>
                     </div>
                 </div>
+            {% empty %}
+                <div class="col-md-12 text-center">
+                    <h1>您还没有设置网址导航</h1>
+                    <p>点击右上角用户名，打开 用户后台 进行设置</p>
+                </div>
             {% endfor %}
-        </div>
-    {% else %}
-        <div class="col-md-12 text-center">
-            <h1>您还没有设置网址导航</h1>
-            <p>点击右上角用户名，打开 用户后台 进行设置</p>
         </div>
     {% endif %}
 {% endblock %}

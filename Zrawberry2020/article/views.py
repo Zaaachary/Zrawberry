@@ -211,6 +211,8 @@ def article_titles(request, column_name=None):
 
 def article_content(request, aid, slug):
     article = get_object_or_404(ArticlePost, id=aid, slug=slug)
+    article.viewed += 1
+    article.save()
     context = {
         "article": article,
         "blog": 'active',
