@@ -19,10 +19,11 @@ class ArticlePost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="article")
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=500)
-    column = models.ForeignKey(ArticleColumn, on_delete=models.CASCADE, related_name="article_column")
+    column = models.ForeignKey(ArticleColumn, on_delete=models.PROTECT, related_name="article", blank=True)
     body = models.TextField()
-    created = models.DateTimeField(default=timezone.now)    # 时区的发布时间
+    created = models.DateTimeField(default=timezone.now)  # 时区的发布时间
     updated = models.DateTimeField(auto_now=True)
+
     # users_like = models.ManyToManyField(User, related_name="articles_like", blank=True)
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)
 
@@ -43,5 +44,3 @@ class ArticlePost(models.Model):
 
     def get_url_path(self):
         return reverse("article:article_content", args=[self.id, self.slug])
-
-    # def can_open(self):
