@@ -138,6 +138,6 @@ EMAIL_HOST_PASSWORD = 'Passsqma2020'
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "zrawberry_com@163.com"
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # 发送到终端内
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # 发送到终端内
 
 X_FRAME_OPTIONS = 'ALLOWALL url'
