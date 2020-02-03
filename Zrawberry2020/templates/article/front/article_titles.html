@@ -29,21 +29,25 @@
 
     <div class="col-md-3">
         <div class="list-group">
-            <h3 href="#" class="list-group-item">文章归档</h3>
-            <a href="#" class="list-group-item active">All</a>
-            <a href="#" class="list-group-item">Django</a>
-            <a href="#" class="list-group-item">Python</a>
-            <a href="#" class="list-group-item">Machine Learning</a>
+            <h3 class="list-group-item">文章归档</h3>
+            <a href="{% url 'article:article_titles' %}" class="list-group-item {% if not active %}active{% endif %}">All</a>
+            {% for column in columns %}
+                <a href="{% url 'article:article_titles' column.column %}"
+                   class="list-group-item {% ifequal  column.column active %}active{% endifequal %}">
+                    {{ column.column }}</a>
+            {% endfor %}
         </div>
-        <h3>声明</h3>
-        <p>本站系
-            <mark>快刀切草莓君</mark>
-            的个人网站，账号功能目前仅用于存储网址导航。
-        </p>
-        <p>本站的博客仅
-            <mark>快刀切草莓君</mark>
-            可发文，其余用户仅可阅读和点赞。
-        </p>
+        <div class="well well-sm">
+            <h3>声明</h3>
+            <p>本站系
+                <mark>快刀切草莓君</mark>
+                的个人网站，账号功能目前仅用于存储网址导航。
+            </p>
+            <p>本站的博客仅
+                <mark>快刀切草莓君</mark>
+                可发文，其余用户仅可阅读和点赞。
+            </p>
+        </div>
     </div>
 {% endblock %}
 

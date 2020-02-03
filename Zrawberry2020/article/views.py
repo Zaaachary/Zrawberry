@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from .models import ArticleColumn, ArticlePost
 from .forms import ArticleColumnForm, ArticlePostForm
@@ -97,7 +98,6 @@ def article_post(request):
             "article_columns": article_columns,
             # "article_tags": article_tags,
             "post": 'active',
-
         }
         return render(request, "article/column/article_post.html", context=context)
 
@@ -172,9 +172,19 @@ def redit_article(request, article_id):
             return HttpResponse("2")
 
 
-def article_titles(request):
-    # articles_title = ArticlePost.objects.all()
-    articles_title = User.objects.get(username="Zachary").article.all()
+def article_titles(request, column_name=None):
+    # 获取文章列表
+    if column_name:
+        try:
+            # articles_title = ArticleColumn.objects.get(column=column_name).article.all()
+            # articles_title = ArticleColumn.objects.get(column=column_name).article.all()
+            column = ArticleColumn.objects.get(column=column_name)
+            articles_title = ArticlePost.objects.filter(column=column)
+        except:
+            return HttpResponseRedirect(reverse('article:article_titles'))
+    else:
+        articles_title = User.objects.get(id=1).article.all()
+    # 文章分页
     paginator = Paginator(articles_title, 5)
     page = request.GET.get('page')
     try:
@@ -186,16 +196,23 @@ def article_titles(request):
     except EmptyPage:
         current_page = paginator.page(paginator.num_pages)
         articles = current_page.object_list
+    # 获取分类列表
+    columns = User.objects.get(id=1).article_column.all()
     context = {
+        "blog": 'active',
         "articles": articles,
         "page": current_page,
-        "blog": 'active',
+        "columns": columns,
     }
+    if column_name:
+        context['active'] = column_name
     return render(request, "article/front/article_titles.html", context=context)
 
 
-def article_content(request, id, slug):
-    article = get_object_or_404(ArticlePost, id=id, slug=slug)
+def article_content(request, aid, slug):
+    article = get_object_or_404(ArticlePost, id=aid, slug=slug)
+    article.viewed += 1
+    article.save()
     context = {
         "article": article,
         "blog": 'active',
