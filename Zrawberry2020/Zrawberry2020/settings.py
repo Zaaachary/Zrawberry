@@ -127,8 +127,6 @@ STATICFILES_DIRS = (
 )
 # STATIC_ROOT ='/www/wwwroot/zrawberry_www/static/'
 
-
-
 LOGIN_REDIRECT_URL = '/account/dashboard/'
 LOGIN_URL = '/account/login/'
 
