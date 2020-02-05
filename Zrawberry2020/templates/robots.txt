@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /Blog
+Allow: /Navigation
+Allow: /$
+Disallow: /admin
+Disallow: /account

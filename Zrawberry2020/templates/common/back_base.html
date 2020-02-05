@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}{% endblock %}- 草莓君的妙妙屋</title>
+    <title>{% block title %}仪表盘{% endblock %}- 草莓君的妙妙屋</title>
 
     <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon"/>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -14,14 +14,21 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-{% include "header.html" %}
+{% include 'common/back_header.html' %}
 
 <div class="container content">
+    <div class="col-md-9" style="background-color: white">
 {% block content %}
+    <h1 class="well-lg">欢迎使用妙妙屋后台</h1>
 {% endblock %}
+    </div>
+
+    <div class="col-md-3">
+        {% include 'common/back_leftslider.html' %}
+    </div>
 </div>
 
-{% include "footer.html" %}
+{% include 'common/footer.html' %}
 
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>

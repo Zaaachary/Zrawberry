@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon"/>
+
+    <title>草莓君的妙妙屋</title>
+
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cover.css' %}" rel="stylesheet">
+    <style>
+        body {
+                background-image: url("{% static 'image/background.jpg' %}");
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">草莓君的妙妙屋</h3>
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a href="#">首页</a></li>
+                            <li><a href="{% url 'article:article_titles' %}">博客</a></li>
+                            <li><a href="{% url 'navigation:navigation_index' %}">网址导航</a></li>
+                            <li class="disabled"><a href="#">实验室</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="inner cover">
+                <h1 class="cover-heading">欢迎来到妙妙屋</h1>
+                <p class="lead">妙妙屋是快刀切草莓君的个人网站</p>
+                    <p class="lead">您可以在这里看到他最新的博文，或使用自定义的网址导航服务</p>
+                <p class="lead">其他功能也会陆续上线，敬请期待！</p>
+                <p class="lead">
+                    <a href="{% url 'navigation:navigation_index' %}" class="btn btn-lg btn-default">进入妙妙屋</a>
+                </p>
+            </div>
+
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>@2018-2020 草莓君的妙妙屋</p>
+                    <p>互联网ICP备案：闽ICP备18004703号-1</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+
+</body>
+
+</html>

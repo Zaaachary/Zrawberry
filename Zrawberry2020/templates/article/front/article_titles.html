@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "common/base.html" %}
 {% load static %}
 
 {% block title %}
@@ -24,7 +24,7 @@
             </div>
             <hr>
         {% endfor %}
-        {% include "paginator.html" %}
+        {% include "common/paginator.html" %}
     </div>
 
     <div class="col-md-3">
@@ -32,7 +32,7 @@
             <h3 class="list-group-item">文章归档</h3>
             <a href="{% url 'article:article_titles' %}" class="list-group-item {% if not active %}active{% endif %}">All</a>
             {% for column in columns %}
-                <a href="{% url 'article:article_titles' column.column %}"
+                <a href="{% url 'article:article_column' column.column %}"
                    class="list-group-item {% ifequal  column.column active %}active{% endifequal %}">
                     {{ column.column }}</a>
             {% endfor %}

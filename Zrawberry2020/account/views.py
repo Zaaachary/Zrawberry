@@ -133,4 +133,4 @@ def my_image(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'back_base.html', context={"account": 'active', })
+    return render(request, 'common/back_base.html', context={"account": 'active', })
