@@ -1,0 +1,16 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<h3>图片列表</h3>
+<ul>
+{% if picture_list %}
+    {% for picture in picture_list %}
+    <li><a href="{% url 'images:pic_detail' picture.id %}">{{ picture.title }}</a>
+        - {{ picture.date| date:"Y-m-j" }}</li>
+    {% endfor %}
+{% else %}
+    <li>还没有上传新图片</li>
+{% endif %}
+</ul>
+<p><a href="{% url 'images:pic_upload' %}">上传新图片</a></p>
+{% endblock %}

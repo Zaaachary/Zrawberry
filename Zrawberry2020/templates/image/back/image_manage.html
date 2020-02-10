@@ -1,0 +1,20 @@
+{% extends "common/back_base.html" %}
+
+{% load static %}
+
+{% block title %}
+    图片管理
+{% endblock %}
+
+{% block content %}
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">上传</button>
+    </form>
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

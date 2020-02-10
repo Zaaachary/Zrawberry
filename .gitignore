@@ -4,4 +4,4 @@
 .idea
 .vscode
 settings.py
-*/migrations/*
+media/
