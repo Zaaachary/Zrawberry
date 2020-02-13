@@ -52,3 +52,16 @@ class ArticlePost(models.Model):
     @staticmethod
     def is_special_user(user):
         return user in [1, 11, 14]
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(ArticlePost, on_delete=models.CASCADE, related_name="comments")
+    commentator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    body = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "{0}在{1}中发表".format(self.commentator.username, self.article)
