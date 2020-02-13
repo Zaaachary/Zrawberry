@@ -9,7 +9,7 @@ import os
 
 
 def path_and_rename(instance, filename):
-    upload_to = 'mypictures'
+    upload_to = 'picture'
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format(uuid4().hex, ext)
     # return the whole path to the file

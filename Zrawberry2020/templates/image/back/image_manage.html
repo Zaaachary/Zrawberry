@@ -3,18 +3,106 @@
 {% load static %}
 
 {% block title %}
-    图片管理
+    图片
 {% endblock %}
 
 {% block content %}
-    <form action="." method="post">
+    <h3>图片列表</h3>
+    {% if picture_list %}
+        <table class="table table-hover" id="result">
+            <tbody>
+            <tr>
+                <td>文件名</td>
+                <td>文件大小</td>
+                <td>上传日期</td>
+            </tr>
+            {% for picture in picture_list %}
+                <tr>
+                    <td><a href="{{ picture.image.url }}">{{ picture.title }}</a></td>
+                    <td>{{ picture.image.size | filesizeformat }}</td>
+                    <td>{{ picture.date| date:"Y-m-j" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <li>还没有上传新图片</li>
+    {% endif %}
+
+    <h3>上传图片</h3>
+    <form action="" method="post" enctype="multipart/form-data" id="form">
+        <ul class="errorlist"></ul>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">上传</button>
+        <input type="button" class="btn btn-default" value="ajax上传" id="btn"/>
     </form>
+
+
 
 {% endblock %}
 
 {% block javascript %}
+    <script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js ">
+    </script>
+    <script>
+        var csrftoken = $.cookie('csrftoken');
 
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $(document).ready(function () {
+            $('#btn').click(function (e) {
+                e.preventDefault();
+                // 构建FormData对象
+                var form_data = new FormData();
+                form_data.append('image', $('#id_image')[0].files[0]);
+                form_data.append('title', $('#id_title').val());
+                $.ajax({
+                    url: '{% url 'images:ajax_upload' %}',
+                    data: form_data,
+                    type: 'POST',
+                    dataType: 'json',
+                    // 告诉jQuery不要去处理发送的数据, 发送对象。
+                    processData: false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType: false,
+                    // 获取POST所需的csrftoken
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    },
+                    success: function (data) {
+                        if (data['error_msg']) {
+                            var content = data['error_msg'];
+                            $('ul.errorlist').html(content);
+                        }
+                        else {
+                            var content = '<tbody><tr>' +
+                                '<th>文件名</th>' +
+                                '<th>文件大小</th>' +
+                                '<th>上传日期</th>' +
+                                '</tr>';
+                            $.each(data, function (i, item) {
+                                content = content +
+                                    '<tr><td>' +
+                                    "<a href= ' " +
+                                    item['url'] +
+                                    " '> " +
+                                    item['title'] +
+                                    '</a></td><td>' +
+                                    item['size'] +
+                                    '</td><td>' +
+                                    item['date'] +
+                                    '</td><tr>'
+                            });
+                            content = content + "</tbody>";
+                            $('#result').html(content);
+                        }
+                    },
+                });
+            });
+        });
+    </script>
 {% endblock %}
