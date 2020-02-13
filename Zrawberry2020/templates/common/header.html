@@ -14,7 +14,11 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="{{ blog }}"><a href="{% url 'article:article_titles' %}" >博客</a></li>
+                {% if dessert %}
+                    <li class="{{ blog }}"><a href="{% url 'article:dessert' %}" >甜品站</a></li>
+                {% else %}
+                    <li class="{{ blog }}"><a href="{% url 'article:article_titles' %}" >博客</a></li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav {{ navigation }}">
                 <li class="{{ navigation }}"><a href="{% url 'navigation:navigation_index' %}">网址导航</a></li>

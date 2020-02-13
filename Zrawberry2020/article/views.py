@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 
 from .models import ArticleColumn, ArticlePost
-from .forms import ArticleColumnForm, ArticlePostForm
+from .forms import ArticleColumnForm, ArticlePostForm, CommentForm
 
 
 # @permission_required()
@@ -70,7 +70,6 @@ def article_post(request):
     if request.method == "POST":
         article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
-            cd = article_post_form.cleaned_data
             try:
                 new_article = article_post_form.save(commit=False)
                 new_article.author = request.user
@@ -173,17 +172,18 @@ def redit_article(request, article_id):
 
 
 def article_titles(request, column_name=None):
+    articles = User.objects.get(id=1).article.filter(showtype='0')  # 只展示Zachary的
     # 获取文章列表
     if column_name:
         try:
             # articles_title = ArticleColumn.objects.get(column=column_name).article.all()
             # articles_title = ArticleColumn.objects.get(column=column_name).article.all()
             column = ArticleColumn.objects.get(column=column_name)
-            articles_title = ArticlePost.objects.filter(column=column)
+            articles_title = articles.filter(column=column)
         except:
             return HttpResponseRedirect(reverse('article:article_titles'))
     else:
-        articles_title = User.objects.get(id=1).article.all()
+        articles_title = articles
     # 文章分页
     paginator = Paginator(articles_title, 5)
     page = request.GET.get('page')
@@ -211,10 +211,61 @@ def article_titles(request, column_name=None):
 
 def article_content(request, aid, slug):
     article = get_object_or_404(ArticlePost, id=aid, slug=slug)
-    article.viewed += 1
+
+    # 特殊类型文章
+    if article.showtype == '1':
+        if request.user == 'AnonymousUser' or not ArticlePost.is_special_user(request.user.id):
+            return HttpResponseRedirect(reverse('article:article_titles'))
+        if request.method == "POST":  # 仅特殊文章可以评论
+            comment_form = CommentForm(data=request.POST)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.article = article
+                new_comment.commentator = request.user
+                new_comment.save()
+            else:
+                return render(request, "404.html")
+        else:
+            comment_form = CommentForm()
+
+    if request.user.id != 1:
+        article.viewed += 1
     article.save()
     context = {
         "article": article,
         "blog": 'active',
     }
+    if article.showtype == '1':
+        context['dessert'] = True
+        context['form'] = comment_form
     return render(request, "article/front/article_content.html", context=context)
+
+
+@login_required
+def dessert(request):
+    if ArticlePost.is_special_user(request.user.id):
+        articles = User.objects.get(id=1).article.filter(showtype='1')
+        articles_title = articles
+        paginator = Paginator(articles_title, 5)
+        page = request.GET.get('page')
+        try:
+            current_page = paginator.page(page)
+            articles = current_page.object_list
+        except PageNotAnInteger:
+            current_page = paginator.page(1)
+            articles = current_page.object_list
+        except EmptyPage:
+            current_page = paginator.page(paginator.num_pages)
+            articles = current_page.object_list
+        # 获取分类列表
+        columns = User.objects.get(id=1).article_column.all()
+        context = {
+            "blog": 'active',
+            "articles": articles,
+            "page": current_page,
+            "columns": columns,
+            "dessert": True,
+        }
+        return render(request, "article/front/article_titles.html", context=context)
+    else:
+        return render(request, "404.html")

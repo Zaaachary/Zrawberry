@@ -9,18 +9,22 @@
 <form class="form-horizontal" action="." method="post">
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-2 text-right"><span>标题:</span></div>
-        <div class="col-md-10 text-left">{{ article_post_form.title }}</div>
+        <div class="col-md-2"><span>标题:</span></div>
+        <div class="col-md-10">{{ article_post_form.title }}</div>
     </div>
     <div class="row">
-        <div class="col-md-2 text-right"><span>栏目:</span></div>
-        <div class="col-md-10 text-left">
+        <div class="col-md-2"><span>栏目:</span></div>
+        <div class="col-md-10">
             <select id="which_column">
                 {% for column in article_columns %}
                     <option value="{{ column.id }}">{{ column.column }}</option>
                 {% endfor %}
             </select>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><span>展示类型:</span></div>
+        {{ article_post_form.showtype }}
     </div>
     {#        <div class="row" style="margin-top: 10px;">#}
     {#            <div class="col-md-2 text-right"><span>文章标签:</span></div> #}
@@ -53,13 +57,14 @@
             var title = $("#id_title").val();
             var column_id = $("#which_column").val();
             var body = $("#id_body").val();
-            var article_tags = [];
+            var showtype = $("#id_showtype").val();
+            {#var article_tags = [];#}
             {#$.each($("input[name='article_tag']:checked"), function(){article_tags.push($(this).val());});#}
             $.ajax({
                 url: "{% url 'article:article_post' %}",
                 type: "POST",
                 {#data: {"title":title, "body":body, "column_id":column_id, "tags":JSON.stringify(article_tags)},#}
-                data: {"title": title, "body": body, "column_id": column_id},
+                data: {"title": title, "body": body, "column_id": column_id, "showtype":showtype },
                 success: function (e) {
                     if (e == "3") {
                         layer.msg("项目名称必须写，不能空。");

@@ -7,6 +7,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 
 from .forms import LoginForm, RegistrationForm, UserProfileForm, UserForm, UserInfoForm
 from .models import UserProfile, UserInfo
+from article.models import ArticlePost
 
 
 def user_login(request):
@@ -133,4 +134,7 @@ def my_image(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'common/back_base.html', context={"account": 'active', })
+    context = {"account": 'active'}
+    if ArticlePost.is_special_user(request.user.id):
+        context["special"] = True
+    return render(request, 'common/back_base.html', context=context)
