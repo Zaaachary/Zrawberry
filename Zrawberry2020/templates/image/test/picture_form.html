@@ -1,0 +1,12 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<h3>上传新图片</h3>
+<form method="post" enctype="multipart/form-data">
+<!-- 必须要添加enctype表示有数据或文件上传-->
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="确定" />
+</form>
+
+{% endblock %}

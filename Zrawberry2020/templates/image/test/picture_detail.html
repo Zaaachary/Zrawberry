@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+    <h3>{{ picture.title }}</h3>
+
+    {% if picture.image %}
+        <p><img src="{{ picture.image.url }}"/></p>
+    {% endif %}
+
+    <p>上传日期: {{ picture.date | date:"Y-m-j" }} </p>
+    <p><a href="{% url 'images:pic_list' %}">查看所有图片</a> |
+        <a href="{% url 'images:pic_upload' %}">上传新图片</a></p>
+{% endblock %}
