@@ -15,12 +15,15 @@
                 <td>文件名</td>
                 <td>文件大小</td>
                 <td>上传日期</td>
+                <td>操作</td>
             </tr>
             {% for picture in picture_list %}
                 <tr>
                     <td><a href="{{ picture.image.url }}">{{ picture.title }}</a></td>
                     <td>{{ picture.image.size | filesizeformat }}</td>
                     <td>{{ picture.date| date:"Y-m-j" }}</td>
+                    <td><a name="delete" href="javascript:" onclick="del_image(this,{{ picture.id }})">
+                        <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -42,8 +45,8 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js ">
-    </script>
+    <script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
+    <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
     <script>
         var csrftoken = $.cookie('csrftoken');
 
@@ -98,11 +101,37 @@
                                     '</td><tr>'
                             });
                             content = content + "</tbody>";
-                            $('#result').html(content);
+                            // $('#result').html(content);
+                            location.reload()
                         }
                     },
                 });
             });
         });
+
+        function del_image(the, image_id) {
+            alert(image_id);
+            $.ajax({
+                url: "{% url 'images:pic_delete' %}",
+                type: "POST",
+                data: {"image_id": image_id},
+                // 获取POST所需的csrftoken
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                },
+                success: function (e) {
+                    if (e == "1") {
+                        layer.msg("删除成功");
+                        location.reload();
+                    } else {
+                        layer.msg("删除失败");
+                    }
+                },
+            })
+        }
+
+
     </script>
 {% endblock %}

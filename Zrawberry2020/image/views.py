@@ -5,6 +5,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 from django.urls import reverse
 from django.template.defaultfilters import filesizeformat
+from django.contrib.auth.decorators import login_required
 
 from .models import Picture
 from .forms import PictureUploadForm
@@ -63,6 +64,7 @@ def picture_modelform_upload(requset):
     return render(requset, 'image/back/image_manage.html', context=context)
 
 
+@login_required
 @require_POST
 def picture_ajax_upload(request):
     form = PictureUploadForm(data=request.POST, files=request.FILES)
@@ -82,6 +84,19 @@ def picture_ajax_upload(request):
     else:
         data = {'error_msg': '仅支持jpg, png格式'}
         return JsonResponse(data)
+
+
+
+@login_required
+@require_POST
+def picture_delete(request):
+    try:
+        image_id = request.POST['image_id']
+        pic = Picture.objects.get(id=image_id)
+        pic.delete()
+        return HttpResponse("1")
+    except:
+        return HttpResponse("2")
 
 
 
