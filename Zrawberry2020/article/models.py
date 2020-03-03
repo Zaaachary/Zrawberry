@@ -32,7 +32,8 @@ class ArticlePost(models.Model):
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)
 
     class Meta:
-        ordering = ("-updated",)
+        # ordering = ("-updated",)
+        ordering = ("-created",)
         index_together = (('id', 'slug'),)  # 使用两个字段建立索引 加快读取速度
 
     def __str__(self):

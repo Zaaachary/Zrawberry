@@ -2,19 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
+from django.views.generic import ListView
 
 from .models import LinkBox
 from .forms import LinkForm
 
 
-def navigation_index(request):
-    context = {}
-    if request.user.is_authenticated:
-        if hasattr(request.user, "LinkBox"):
-            context['LBlist'] = request.user.LinkBox.all()
-    context['navigation'] = 'active'
-    return render(request, "navigation/front/nav_index.html", context=context)
+
 
 
 @login_required
@@ -22,7 +16,7 @@ def navigation_index(request):
 def navigation_list(request):
     """盒子内的链接"""
     if request.method == 'GET':
-        LBlist = request.user.LinkBox.all()
+        LBlist = LinkBox.objects.filter(owner=request.user).order_by('created')
         context = {
             'LBlist': LBlist,
             'LinkForm': LinkForm,
@@ -64,7 +58,7 @@ def navigation_list(request):
 @csrf_exempt
 def navigation_box(request):
     if request.method == 'GET':
-        LBlist = request.user.LinkBox.all()
+        LBlist = LinkBox.objects.filter(owner=request.user).order_by('created')
         context = {
             'LBlist': LBlist,
             'boxes': 'active',
@@ -89,3 +83,31 @@ def navigation_box(request):
                 return HttpResponse("1")
             except:
                 return HttpResponse("2")
+
+
+def navigation_index(request):
+    context = {}
+    if request.user.is_authenticated:
+        if hasattr(request.user, "LinkBox"):
+            context['LBlist'] = request.user.LinkBox.all()
+    context['navigation'] = 'active'
+    return render(request, "navigation/front/nav_index.html", context=context)
+
+
+class FrontendView(ListView):
+    # template_name = "navigation/back/nav_box.html"
+    template_name = "navigation/front/nav_index.html"
+    context_object_name = 'LBlist'
+
+    def get_queryset(self):
+        # self.request.user
+        if self.request.user.is_authenticated:
+            return LinkBox.objects.filter(owner=self.request.user).order_by('-created')
+        else:
+            return None
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['navigation'] = 'active'
+        return context
+

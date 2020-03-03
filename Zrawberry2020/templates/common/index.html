@@ -31,9 +31,9 @@
                     <h3 class="masthead-brand">草莓君的妙妙屋</h3>
                     <nav>
                         <ul class="nav masthead-nav">
-                            <li class="active"><a href="#">首页</a></li>
-                            <li><a href="http://www.zrawberry.com/blog/">博客</a></li>
-                            <li><a href="http://www.zrawberry.com/navigation/">网址导航</a></li>
+                            <li class="active"><a href="#">封面</a></li>
+                            <li><a href="{% url 'article:article_titles' %}">博客</a></li>
+                            <li><a href="{% url 'navigation:navigation_index' %}">网址导航</a></li>
                             <li class="disabled"><a href="#">实验室</a></li>
                         </ul>
                     </nav>
@@ -46,7 +46,7 @@
                     <p class="lead">您可以在这里看到他最新的博文，或使用自定义的网址导航服务</p>
                 <p class="lead">其他功能也会陆续上线，敬请期待！</p>
                 <p class="lead">
-                    <a href="http://www.zrawberry.com/navigation/" class="btn btn-lg btn-default">进入妙妙屋</a>
+                    <a href="{% url 'article:article_titles' %}" class="btn btn-lg btn-default">进入妙妙屋</a>
                 </p>
             </div>
 
