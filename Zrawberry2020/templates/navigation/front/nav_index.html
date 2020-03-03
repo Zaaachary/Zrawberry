@@ -4,6 +4,9 @@
 {% block title %}
     网址导航
 {% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="col-md-12">
@@ -25,28 +28,46 @@
             <p>体验具体功能请您先进行<a href="{% url 'account:user_login' %}">登录</a></p>
         </div>
     {% else %}
-        <div class="row">
-            {% for LB in LBlist %}
-                <div class="col-md-4" style="padding: 5px;">
-                    <div class="panel panel-default" style="margin-bottom: 0px">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ LB.boxname }}</h3>
-                        </div>
-                        <div>
-                            {% for sitename,url in LB.str2dict.items %}
-                                <div class="btn btn-link">
-                                    <a href="{{ url }}" target="_blank">{{ sitename }}</a>
-                                </div>
-                            {% endfor %}
+        <div class="col-md-12">
+            <div class="grid">
+                {% for LB in LBlist %}
+                    <div class="grid-sizer"></div>
+                    <div class="grid-item grid-item--width2 ">
+                        <div class="panel panel-default" style="margin-bottom: 0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ LB.boxname }}</h3>
+                            </div>
+                            <div>
+                                {% for sitename,url in LB.str2dict.items %}
+                                    <div class="btn btn-link">
+                                        <a href="{{ url }}" target="_blank">{{ sitename }}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% empty %}
-                <div class="col-md-12 text-center">
-                    <h1>您还没有设置网址导航</h1>
-                    <p>点击右上角用户名，打开 用户后台 进行设置</p>
-                </div>
-            {% endfor %}
+                {% empty %}
+                    <div class="col-md-12 text-center">
+                        <h1>您还没有设置网址导航</h1>
+                        <p>点击右上角用户名，打开 用户后台 进行设置</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
+{% endblock %}
+
+
+{% block javascript %}
+    <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+    <script>
+        $('.grid').masonry({
+            // set itemSelector so .grid-sizer is not used in layout
+            itemSelector: '.grid-item',
+            // use element for option
+            columnWidth: '.grid-sizer',
+            percentPosition: true,
+            gutter: 5,
+        })
+    </script>
 {% endblock %}

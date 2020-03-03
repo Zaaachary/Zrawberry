@@ -235,8 +235,10 @@ def article_content(request, aid, slug):
         "article": article,
         "blog": 'active',
     }
+    # 甜品站文章
     if article.showtype == '1':
-        context['dessert'] = True
+        context['dessert'] = 'active'
+        del context['blog']
         context['form'] = comment_form
     return render(request, "article/front/article_content.html", context=context)
 
@@ -260,11 +262,10 @@ def dessert(request):
         # 获取分类列表
         columns = User.objects.get(id=1).article_column.all()
         context = {
-            "blog": 'active',
+            "dessert": 'active',
             "articles": articles,
             "page": current_page,
             "columns": columns,
-            "dessert": True,
         }
         return render(request, "article/front/article_titles.html", context=context)
     else:
