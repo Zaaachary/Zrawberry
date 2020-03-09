@@ -13,7 +13,7 @@
     <link href="{% static 'css/cover.css' %}" rel="stylesheet">
     <style>
         body {
-                background-image: url("{% static 'image/background.jpg' %}");
+            background-image: url("{% static 'image/background.jpg' %}");
         }
     </style>
 </head>
@@ -43,7 +43,7 @@
             <div class="inner cover">
                 <h1 class="cover-heading">欢迎来到妙妙屋</h1>
                 <p class="lead">妙妙屋是快刀切草莓君的个人网站</p>
-                    <p class="lead">您可以在这里看到他最新的博文，或使用自定义的网址导航服务</p>
+                <p class="lead">您可以在这里看到他最新的博文，或使用自定义的网址导航服务</p>
                 <p class="lead">其他功能也会陆续上线，敬请期待！</p>
                 <p class="lead">
                     <a href="{% url 'article:article_titles' %}" class="btn btn-lg btn-default">进入妙妙屋</a>
@@ -53,7 +53,8 @@
             <div class="mastfoot">
                 <div class="inner">
                     <p>@2018-2020 草莓君的妙妙屋</p>
-                    <p>互联网ICP备案：闽ICP备18004703号-1</p>
+                    <p>互联网ICP备案：<a href="http://beian.miit.gov.cn/">闽ICP备18004703号-1</a></p>
+
                 </div>
             </div>
 
