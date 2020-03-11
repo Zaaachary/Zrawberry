@@ -14,7 +14,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="{{ blog }}"><a href="{% url 'article:article_titles' %}">博客</a></li>
+                <li class="{{ blog }}"><a href="{% url 'article:article_titles' %}">文章</a></li>
                 {% if dessert %}
                     <li class="{{ dessert }}"><a href="{% url 'article:dessert' %}">甜品站</a></li>
                 {% endif %}

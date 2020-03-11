@@ -24,7 +24,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='common/index.html')),
     path('admin/', admin.site.urls),
     path('account/', include('account.urls', namespace='account')),
-    path('blog/', include('article.urls', namespace='article')),
+    path('article/', include('article.urls', namespace='article')),
     path('navigation/', include('navigation.urls', namespace='navigation')),
     path('images/', include('image.urls', namespace='images')),
     # robots, sitemap
