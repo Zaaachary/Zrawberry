@@ -33,8 +33,9 @@
             <h3 class="list-group-item">文章信息</h3>
             <p class="list-group-item">标题：{{ article.title }}</p>
             <p class="list-group-item">作者：快刀切草莓君</p>
-            <p class="list-group-item">归档：{{ article.column }}</p>
+            <p class="list-group-item">分类：{{ article.column }}</p>
             <p class="list-group-item">发布时间：{{ article.created|date }}</p>
+            <p class="list-group-item">最近编辑：undefine</p>
             <p class="list-group-item">浏览量：{{ article.viewed }}</p>
         </div>
         {% if dessert %}

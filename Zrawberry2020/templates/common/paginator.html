@@ -1,15 +1,40 @@
-<div class="pagination">
-    <span class="step-links">
+ <span class="current">
+
+    </span>
+
+
+
+<nav aria-label="Page navigation" class="text-center">
+    <ul class="pagination">
         {% if page.has_previous %}
-        <a href="?page={{ page.previous_page_number }}">上一页</a>
+            <li>
+                <a href="?page={{ page.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% else %}
+            <li class="disabled">
+                <a aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
         {% endif %}
-    </span>
-    <span class="current">
-        共{{ page.paginator.num_pages }}页 当前在第{{ page.number }}页
-    </span>
-    <span class="step-links">
+        {% for num in paginator.page_range %}
+        {% endfor %}
+        <li><a>第{{ page.number }}页 共{{ page.paginator.num_pages }}页 </a></li>
+
+
+
         {% if page.has_next %}
-            <a href="?page={{ page.next_page_number }}">下一页</a>
+            <li>
+                <a href="?page={{ page.next_page_number }}" aria-label="Next"><span
+                        aria-hidden="true">&raquo;</span></a>
+            </li>
+        {% else %}
+            <li class="disabled">
+                <a aria-label="Next"><span
+                        aria-hidden="true">&raquo;</span></a>
+            </li>
         {% endif %}
-    </span>
-</div>
+    </ul>
+</nav>

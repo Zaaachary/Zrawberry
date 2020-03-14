@@ -184,24 +184,29 @@ def article_titles(request, column_name=None):
             return HttpResponseRedirect(reverse('article:article_titles'))
     else:
         articles_title = articles
+
     # 文章分页
-    paginator = Paginator(articles_title, 5)
-    page = request.GET.get('page')
+    paginator = Paginator(articles_title, 3)
+    page_number = request.GET.get('page')
+    # try:
+    #     current_page = paginator.page(page_number)
+    #     articles = current_page.object_list
     try:
-        current_page = paginator.page(page)
-        articles = current_page.object_list
+        page_obj = paginator.get_page(page_number)
+        articles = page_obj.object_list
     except PageNotAnInteger:
-        current_page = paginator.page(1)
-        articles = current_page.object_list
+        page_obj = paginator.get_page(1)
+        articles = page_obj.object_list
     except EmptyPage:
-        current_page = paginator.page(paginator.num_pages)
-        articles = current_page.object_list
+        page_obj = paginator.get_page(paginator.num_pages)
+        articles = page_obj.object_list
+
     # 获取分类列表
     columns = User.objects.get(id=1).article_column.all()
     context = {
         "blog": 'active',
         "articles": articles,
-        "page": current_page,
+        "page": page_obj,
         "columns": columns,
     }
     if column_name:

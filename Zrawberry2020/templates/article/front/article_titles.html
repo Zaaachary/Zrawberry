@@ -11,6 +11,20 @@
 
 {% block content %}
     <div class="col-md-9">
+        <ul class="nav nav-tabs">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="搜索文章（尚未实现）">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <li role="presentation" class="active"><a href="#">文章列表</a></li>
+            <li role="presentation"><a href="#">分类 标签</a></li>
+            <li role="presentation"><a href="#">归档</a></li>
+        </ul>
+
+        <div class="mdblock"></div>
+
         {% for article in articles %}
             <div id="markdown{{ forloop.counter }}">
                 <textarea style="display: none">
@@ -19,17 +33,20 @@
 
 {{ article.body|slice:'100' }}...
 
-<a href="{{ article.get_url_path }}">查看详细内容</a>
+<p><span class="label label-default">标签1</span> <span class="label label-default">标签2</span> <a
+        href="{{ article.get_url_path }}">查看详细内容</a></p>
                 </textarea>
             </div>
-            <hr>
+            <div class="mdblock"></div>
+            {#            <hr>#}
         {% endfor %}
         {% include "common/paginator.html" %}
     </div>
 
     <div class="col-md-3">
+
         <div class="list-group">
-            <h3 class="list-group-item">文章归档</h3>
+            <h3 class="list-group-item">文章分类</h3>
             <a href="{% url 'article:article_titles' %}" class="list-group-item {% if not active %}active{% endif %}">All</a>
             {% for column in columns %}
                 <a href="{% url 'article:article_column' column.column %}"
@@ -43,7 +60,7 @@
                 <mark>快刀切草莓君</mark>
                 的个人网站，账号功能目前仅用于存储网址导航。
             </p>
-            <p>本站的博客仅
+            <p>本站的文章仅
                 <mark>快刀切草莓君</mark>
                 可发文，其余用户仅可阅读和点赞。
             </p>
