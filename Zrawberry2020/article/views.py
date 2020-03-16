@@ -6,8 +6,11 @@ from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.views.generic.edit import CreateView, UpdateView
+from django.utils.decorators import method_decorator
 
-from .models import ArticleColumn, ArticlePost
+
+from .models import ArticleColumn, ArticlePost, ArticleTag
 from .forms import ArticleColumnForm, ArticlePostForm, CommentForm
 
 
@@ -99,6 +102,32 @@ def article_post(request):
             "post": 'active',
         }
         return render(request, "article/column/article_post.html", context=context)
+
+
+class ArticlePostView(CreateView):
+    model = ArticlePost
+    # title, column, body, showtype,targetuser
+    fields = ['title', 'column', 'showtype', 'targetuser', 'body', 'tags']
+    template_name = 'article/column/article_post.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ArticlePostView, self).dispatch(request, *args, **kwargs)
+
+
+class ArticleEditView(UpdateView):
+    model = ArticlePost
+    fields = ['title', 'column', 'showtype', 'targetuser', 'body', 'tags']
+    template_name = 'article/column/article_post.html'
+    # template_name_suffix = '_update_form'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ArticleEditView, self).dispatch(request, *args, **kwargs)
 
 
 @login_required()

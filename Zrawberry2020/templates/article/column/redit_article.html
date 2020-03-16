@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+{{ form }}
     <div>
         <form class="form-horizontal" action="." method="post">{% csrf_token %}
             <div class="row" style="margin-top: 10px;">
@@ -62,7 +63,7 @@
             var column_id = $("#which_column").val();
             var body = $("#id_body").val();
             $.ajax({
-                url: "{% url 'article:redit_article' article.id %}",
+                {#url: "{% url 'article:redit_article' article.id %}",#}
                 type: "POST",
                 data: {"title": title, "body": body, "column_id": column_id},
                 success: function (e) {

@@ -15,18 +15,34 @@ class ArticleColumn(models.Model):
         return self.column
 
 
+class ArticleTag(models.Model):
+    tag = models.CharField(max_length=30, blank=False)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.tag
+
+
 class ArticlePost(models.Model):
-    SHOW_TYPE = [('0', 'DEFAULT'), ('1', 'SPECIAL')]
+    SHOW_TYPE = [('0', '文章'), ('1', '甜品站'), ('2', '特殊页面')]
+    # author, title, slug, column, body, created, updated,viewed, showtype,targetuser,tags
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="article")
-    title = models.CharField(max_length=200)
+    title = models.CharField(verbose_name="标题", max_length=200)
+    column = models.ForeignKey(ArticleColumn, verbose_name="栏目", on_delete=models.PROTECT,
+                               related_name="article", null=True, blank=True)
+    tags = models.ManyToManyField(ArticleTag, verbose_name="标签", blank=True, null=True,
+                                  related_name="Articles")
+    body = models.TextField(verbose_name="正文")
+    showtype = models.CharField(verbose_name="展示类型", max_length=10, choices=SHOW_TYPE, default='0')
+    targetuser = models.ManyToManyField(User, verbose_name="目标用户(甜品站)",
+                                        related_name="dessert", blank=True)
+
     slug = models.SlugField(max_length=500)
-    column = models.ForeignKey(ArticleColumn, on_delete=models.PROTECT, related_name="article", blank=True)
-    body = models.TextField()
     created = models.DateTimeField(default=timezone.now)  # 时区的发布时间
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(default=timezone.now)
     viewed = models.IntegerField(default=0)
-    showtype = models.CharField(max_length=10, choices=SHOW_TYPE, default='0')
+
 
     # users_like = models.ManyToManyField(User, related_name="articles_like", blank=True)
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)
