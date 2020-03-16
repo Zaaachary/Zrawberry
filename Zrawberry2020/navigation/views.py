@@ -8,9 +8,6 @@ from .models import LinkBox
 from .forms import LinkForm
 
 
-
-
-
 @login_required
 @csrf_exempt
 def navigation_list(request):

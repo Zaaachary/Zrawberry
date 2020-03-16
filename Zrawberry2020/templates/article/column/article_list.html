@@ -23,7 +23,7 @@
                     <td>{{ article.column }}</td>
                     <td>{{ article.viewed }}</td>
                     <td>
-                        <a name="edit" href="{% url 'article:redit_article' article.id %}">
+                        <a name="edit" href="{% url 'article:redit_article' article.id article.slug %}">
                             <span class="glyphicon glyphicon-pencil"></span></a>
                         <a name="delete" href="javascript:" onclick="del_article(this,{{ article.id }})">
                             <span class="glyphicon glyphicon-trash" style="margin-left:20px"></span></a>

@@ -33,7 +33,7 @@
 
 {{ article.body|slice:'100' }}...
 
-<p><span class="label label-default">标签1</span> <span class="label label-default">标签2</span> <a
+<p>{% for tag in article.tags.all %}<span class="label label-default">{{ tag.tag }}</span>{% endfor %} <a
         href="{{ article.get_url_path }}">查看详细内容</a></p>
                 </textarea>
             </div>

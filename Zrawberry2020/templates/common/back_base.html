@@ -17,16 +17,18 @@
 {% include 'common/back_header.html' %}
 
 <div class="container content">
-    <div class="col-md-9" style="background-color: white">
-{% block content %}
-    <div class="well-lg">
-    <h1>妙妙屋欢迎您的到访</h1>
-    <p>你所在的位置：用户后台</p>
-    {% if special %}
-        您是特殊用户，可以访问 <a href="{% url 'article:dessert' %}">甜品站</a> ！
-    {% endif %}
-    </div>
-{% endblock %}
+    <div class="col-md-9">
+        <div style="background: #FFF;">
+        {% block content %}
+            <div class="well-lg">
+                <h1>妙妙屋欢迎您的到访</h1>
+                <p>你所在的位置：用户后台</p>
+                {% if special %}
+                    您是特殊用户，可以访问 <a href="{% url 'article:dessert' %}">甜品站</a> ！
+                {% endif %}
+            </div>
+        {% endblock %}
+        </div>
     </div>
 
     <div class="col-md-3">
