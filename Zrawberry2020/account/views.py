@@ -135,6 +135,8 @@ def my_image(request):
 @login_required
 def dashboard(request):
     context = {"account": 'active'}
-    if ArticlePost.is_special_user(request.user.id):
+    # if ArticlePost.is_special_user(request.user.id):
+    #     context["special"] = True
+    if request.user.has_perm('article.get_dessert'):
         context["special"] = True
     return render(request, 'common/back_base.html', context=context)

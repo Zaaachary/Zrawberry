@@ -31,8 +31,7 @@ class ArticlePost(models.Model):
     title = models.CharField(verbose_name="标题", max_length=200)
     column = models.ForeignKey(ArticleColumn, verbose_name="栏目", on_delete=models.PROTECT,
                                related_name="article", null=True, blank=True)
-    tags = models.ManyToManyField(ArticleTag, verbose_name="标签", blank=True, null=True,
-                                  related_name="Articles")
+    tags = models.ManyToManyField(ArticleTag, verbose_name="标签", blank=True, related_name="Articles")
     body = models.TextField(verbose_name="正文")
     showtype = models.CharField(verbose_name="展示类型", max_length=10, choices=SHOW_TYPE, default='0')
     targetuser = models.ManyToManyField(User, verbose_name="目标用户(甜品站)",
@@ -48,9 +47,11 @@ class ArticlePost(models.Model):
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)
 
     class Meta:
-        # ordering = ("-updated",)
-        ordering = ("-created",)
+        ordering = ("-updated",)
         index_together = (('id', 'slug'),)  # 使用两个字段建立索引 加快读取速度
+        permissions = (
+            ("get_dessert", "可以进入甜品站，查看以自己为对象的文章。"),
+        )
 
     def __str__(self):
         return self.title

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -8,6 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
+from django.utils import timezone
+
 
 
 from .models import ArticleColumn, ArticlePost, ArticleTag
@@ -67,44 +69,8 @@ def delete_article_column(request):
         return HttpResponse("0")
 
 
-@login_required()
-@csrf_exempt
-def article_post(request):
-    if request.method == "POST":
-        article_post_form = ArticlePostForm(data=request.POST)
-        if article_post_form.is_valid():
-            try:
-                new_article = article_post_form.save(commit=False)
-                new_article.author = request.user
-                new_article.column = request.user.article_column.get(id=request.POST['column_id'])
-                new_article.save()
-
-                # tags = request.POST['tags']
-                # if tags:
-                #     for atag in json.loads(tags):
-                #         tag = request.user.tag.get(tag=atag)
-                #         new_article.article_tag.add(tag)
-                url = ArticlePost.objects.get(title=request.POST['title']).get_absolute_url()
-                return HttpResponse(url)
-            except:
-                return HttpResponse("2")
-        else:
-            return HttpResponse("3")
-    else:
-        article_post_form = ArticlePostForm()
-        # article_columns = ArticleColumn.objects.filter(user=request.user)
-        article_columns = request.user.article_column.all()  # related_name
-        # article_tags = request.user.tag.all()
-        context = {
-            "article_post_form": article_post_form,
-            "article_columns": article_columns,
-            # "article_tags": article_tags,
-            "post": 'active',
-        }
-        return render(request, "article/column/article_post.html", context=context)
-
-
 class ArticlePostView(CreateView):
+    """文章发布"""
     model = ArticlePost
     # title, column, body, showtype,targetuser
     fields = ['title', 'column', 'showtype', 'targetuser', 'body', 'tags']
@@ -114,16 +80,32 @@ class ArticlePostView(CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ArticlePostView, self).get_context_data(**kwargs)
+        context['post'] = 'active'
+        return context
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(ArticlePostView, self).dispatch(request, *args, **kwargs)
 
 
 class ArticleEditView(UpdateView):
+    """文章编辑"""
     model = ArticlePost
     fields = ['title', 'column', 'showtype', 'targetuser', 'body', 'tags']
     template_name = 'article/column/article_post.html'
+    context_object_name = 'article_form'
     # template_name_suffix = '_update_form'
+
+    def form_valid(self, form):
+        form.instance.updated = timezone.now()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleEditView, self).get_context_data(**kwargs)
+        context['post'] = 'active'
+        return context
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -174,32 +156,6 @@ def del_article(request):
         return HttpResponse("2")
 
 
-@login_required()
-@csrf_exempt
-def redit_article(request, article_id):
-    if request.method == 'GET':
-        article_columns = request.user.article_column.all()
-        article = ArticlePost.objects.get(id=article_id)
-        context = {
-            "article": article,
-            "article_columns": article_columns,
-            "this_article_form": ArticlePostForm(initial={"title": article.title}),
-            "this_article_column": article_column,
-        }
-        return render(request, "article/column/redit_article.html", context=context)
-    else:
-        redit_article = ArticlePost.objects.get(id=article_id)
-        try:
-            redit_article.column = request.user.article_column.get(id=request.POST['column_id'])
-            redit_article.title = request.POST['title']
-            redit_article.body = request.POST['body']
-            redit_article.save()
-            url = ArticlePost.objects.get(id=article_id).get_absolute_url()
-            return HttpResponse(url)
-        except:
-            return HttpResponse("2")
-
-
 def article_titles(request, column_name=None):
     articles = User.objects.get(id=1).article.filter(showtype='0')  # 只展示Zachary的
     # 获取文章列表
@@ -244,11 +200,15 @@ def article_titles(request, column_name=None):
 
 
 def article_content(request, aid, slug):
+    """文章内容"""
     article = get_object_or_404(ArticlePost, id=aid, slug=slug)
-
+    context = {
+        "article": article,
+        "blog": 'active',
+    }
     # 特殊类型文章
     if article.showtype == '1':
-        if request.user == 'AnonymousUser' or not ArticlePost.is_special_user(request.user.id):
+        if request.user == 'AnonymousUser' or not request.user.has_perm('article.get_dessert'):
             return HttpResponseRedirect(reverse('article:article_titles'))
         if request.method == "POST":  # 仅特殊文章可以评论
             comment_form = CommentForm(data=request.POST)
@@ -261,46 +221,43 @@ def article_content(request, aid, slug):
                 return render(request, "404.html")
         else:
             comment_form = CommentForm()
+        context['dessert'] = 'active'
+        del context['blog']
+        context['form'] = comment_form
 
     if request.user.id != 1:
         article.viewed += 1
     article.save()
-    context = {
-        "article": article,
-        "blog": 'active',
-    }
-    # 甜品站文章
-    if article.showtype == '1':
-        context['dessert'] = 'active'
-        del context['blog']
-        context['form'] = comment_form
+
     return render(request, "article/front/article_content.html", context=context)
 
 
 @login_required
+@permission_required('article.get_dessert', raise_exception=True)
 def dessert(request):
-    if ArticlePost.is_special_user(request.user.id):
-        articles = User.objects.get(id=1).article.filter(showtype='1')
-        articles_title = articles
-        paginator = Paginator(articles_title, 5)
-        page = request.GET.get('page')
-        try:
-            current_page = paginator.page(page)
-            articles = current_page.object_list
-        except PageNotAnInteger:
-            current_page = paginator.page(1)
-            articles = current_page.object_list
-        except EmptyPage:
-            current_page = paginator.page(paginator.num_pages)
-            articles = current_page.object_list
-        # 获取分类列表
-        columns = User.objects.get(id=1).article_column.all()
-        context = {
-            "dessert": 'active',
-            "articles": articles,
-            "page": current_page,
-            "columns": columns,
-        }
-        return render(request, "article/front/article_titles.html", context=context)
-    else:
-        return render(request, "404.html")
+    """甜品站titles"""
+    articles = User.objects.get(id=1).article.filter(showtype='1')
+
+    articles_title = articles.filter(targetuser=request.user)
+    paginator = Paginator(articles_title, 5)
+    page = request.GET.get('page')
+
+    try:
+        current_page = paginator.page(page)
+        articles = current_page.object_list
+    except PageNotAnInteger:
+        current_page = paginator.page(1)
+        articles = current_page.object_list
+    except EmptyPage:
+        current_page = paginator.page(paginator.num_pages)
+        articles = current_page.object_list
+    # 获取分类列表
+    columns = User.objects.get(id=1).article_column.all()
+    context = {
+        "dessert": 'active',
+        "articles": articles,
+        "page": current_page,
+        "columns": columns,
+    }
+    return render(request, "article/front/article_titles.html", context=context)
+
