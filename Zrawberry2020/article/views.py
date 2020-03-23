@@ -7,10 +7,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 from django.utils import timezone
-
-
 
 from .models import ArticleColumn, ArticlePost, ArticleTag
 from .forms import ArticleColumnForm, ArticlePostForm, CommentForm
@@ -261,3 +260,9 @@ def dessert(request):
     }
     return render(request, "article/front/article_titles.html", context=context)
 
+
+class TimelineView(ListView):
+    model = ArticlePost
+    queryset = User.objects.get(id=1).article.filter(showtype='0').order_by("-created")
+    template_name = "article/front/article_timeline.html"
+    context_object_name = 'articles'
