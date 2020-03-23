@@ -1,0 +1,187 @@
+{% extends "common/base.html" %}
+{% load static %}
+
+{% block title %}
+    文章列表
+{% endblock %}
+
+{% block css %}
+    <style>
+        ol, ul {
+            padding-left: 0;
+            list-style: none
+        }
+
+        .clearfix-time {
+            display: block;
+            zoom: 1
+        }
+
+        .clearfix-time:after {
+            content: '\20';
+            display: block;
+            clear: both;
+            visibility: hidden;
+            line-height: 0;
+            height: 0
+        }
+
+        .f20 {
+            font-size: 22px
+        }
+
+        .f14 {
+            font-size: 15px
+        }
+
+        .about2 {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background-color: #FFF;
+        }
+
+        .about2 ul {
+            background: url({% static 'image/sy51.png' %}) repeat-y center
+        }
+
+        .about2 li h4:hover {
+            color: #f8f8f8;
+            transition: all 0.75s;
+            transform: translateY(-10px)
+        }
+
+        .about2 li h4 {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            {#color: #ecf0f1;#}
+
+        {#text-transform: uppercase;#} padding: 4px 0;
+            transition: .5s
+        }
+
+        .about2 li h4::after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 1px;
+            top: 100%;
+            left: 0;
+            background: #3498db;
+            transition: transform .5s;
+            transform: scaleX(0);
+            transform-origin: right
+        }
+
+        .about2 li h4:hover {
+            color: #95a5a6
+        }
+
+        .about2 li h4:hover::after {
+            transform: scaleX(1);
+            transform-origin: left
+        }
+
+        .about2 li h4 {
+            color: #333;
+            transition: all 1s
+        }
+
+        .about2 a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .about2 li p {
+            color: #666;
+            margin-top: 10px;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+        }
+
+        .future {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 17px
+        }
+
+        .about2 li:nth-child(1) {
+            margin-top: 0
+        }
+
+        .about2 li {
+            float: right;
+            width: 45%;
+            text-align: left;
+            position: relative;
+            margin-top: 33px
+        }
+
+        .about2 li:nth-child(2n) {
+            float: left;
+            text-align: right;
+            margin-top: 33px
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <ul class="nav nav-tabs">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="搜索文章（尚未实现）">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <li role="presentation"><a href="{% url 'article:article_titles' %}">文章列表</a></li>
+            <li role="presentation"><a href="#">分类 标签</a></li>
+            <li role="presentation" class="active"><a href="">归档</a></li>
+        </ul>
+        <div class="about2">
+            <div class="wrapper clearfix-time">
+                <div class="future">更新中</div>
+                <ul class="clearfix-time">
+                    {% for article in articles %}
+                        <li>
+                            <h4 class="f20"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h4>
+                            <p class="f14">{{ article.created|date }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+
+        <div class="list-group">
+            <h3 class="list-group-item">文章分类</h3>
+            <a href="{% url 'article:article_titles' %}"
+               class="list-group-item {% if not active %}active{% endif %}">
+                所有文章
+            </a>
+            {% for column in columns %}
+                <a href="{% url 'article:article_column' column.column %}"
+                   class="list-group-item {% ifequal  column.column active %}active{% endifequal %}">
+                    {{ column.column }}</a>
+            {% endfor %}
+        </div>
+        <div class="well well-sm">
+            <h3>声明</h3>
+            <p>本站系
+                <mark>快刀切草莓君</mark>
+                的个人网站，账号功能目前仅用于存储网址导航。
+            </p>
+            <p>本站的文章仅
+                <mark>快刀切草莓君</mark>
+                可发文，其余用户仅可阅读和点赞。
+            </p>
+        </div>
+    </div>
+{% endblock %}
+

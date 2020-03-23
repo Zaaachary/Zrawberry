@@ -1,4 +1,6 @@
 from django.urls import path, re_path
+from django.views.generic import TemplateView
+
 from . import views
 
 app_name = "article"
@@ -19,6 +21,7 @@ urlpatterns = [
 
     # 前台
     path('', views.article_titles, name="article_titles"),
+    path('timeline/', views.TimelineView.as_view(), name="timeline"),
     path('dessert/', views.dessert, name="dessert"),
     path('<column_name>/', views.article_titles, name="article_column"),
     path('article-content/<int:aid>/<slug:slug>/', views.article_content, name="article_content"),
