@@ -149,7 +149,7 @@
                 <ul class="clearfix-time">
                     {% for article in articles %}
                         <li>
-                            <h4 class="f20"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h4>
+                            <h4 class="f20"><a href="{{ article.get_url_path }}">{{ article.title }}</a></h4>
                             <p class="f14">{{ article.created|date }}</p>
                         </li>
                     {% endfor %}
