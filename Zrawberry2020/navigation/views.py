@@ -99,7 +99,8 @@ class FrontendView(ListView):
     def get_queryset(self):
         # self.request.user
         if self.request.user.is_authenticated:
-            return LinkBox.objects.filter(owner=self.request.user).order_by('-created')
+            # return LinkBox.objects.filter(owner=self.request.user).order_by('-created')
+            return LinkBox.objects.filter(owner=self.request.user)
         else:
             return None
 
