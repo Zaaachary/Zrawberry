@@ -13,12 +13,12 @@ from .forms import PictureUploadForm
 
 class PicList(ListView):
     queryset = Picture.objects.all().order_by('-date')
-
     # ListView默认Context_object_name是object_list
     context_object_name = 'picture_list'
-
     # 默认template_name = 'pic_upload/picture_list.html'
     template_name = 'image/back/image_manage.html'
+
+    paginate_by = 6
 
     form = PictureUploadForm
     extra_context = {

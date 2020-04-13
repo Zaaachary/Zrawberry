@@ -116,7 +116,7 @@ def article_list(request):
     # articles = ArticlePost.objects.filter(author=request.user)
     # return render(request, "article/column/article_list.html", {"articles": articles})
     articles_list = ArticlePost.objects.filter(author=request.user)
-    paginator = Paginator(articles_list, 10)
+    paginator = Paginator(articles_list, 14)
     page = request.GET.get('page')
     try:
         current_page = paginator.page(page)
@@ -129,7 +129,7 @@ def article_list(request):
         articles = current_page.object_list
     context = {
         "articles": articles,
-        "page": current_page,
+        "page_obj": current_page,
         "list": 'active',
     }
     return render(request, "article/column/article_list.html", context=context)
@@ -190,7 +190,7 @@ def article_titles(request, column_name=None):
     context = {
         "blog": 'active',
         "articles": articles,
-        "page": page_obj,
+        "page_obj": page_obj,
         "columns": columns,
     }
     if column_name:
@@ -208,7 +208,7 @@ def article_content(request, aid, slug):
     # 特殊类型文章
     if article.showtype == '1':
         if request.user == 'AnonymousUser' or not request.user.has_perm('article.get_dessert'):
-            return HttpResponseRedirect(reverse('article:article_titles'))
+            return HttpResponseRedirect(reverse('account:user_login')+'?next='+request.path)
         if request.method == "POST":  # 仅特殊文章可以评论
             comment_form = CommentForm(data=request.POST)
             if comment_form.is_valid():
@@ -238,7 +238,7 @@ def dessert(request):
     articles = User.objects.get(id=1).article.filter(showtype='1')
 
     articles_title = articles.filter(targetuser=request.user)
-    paginator = Paginator(articles_title, 5)
+    paginator = Paginator(articles_title, 3)
     page = request.GET.get('page')
 
     try:
@@ -255,7 +255,7 @@ def dessert(request):
     context = {
         "dessert": 'active',
         "articles": articles,
-        "page": current_page,
+        "page_obj": current_page,
         "columns": columns,
     }
     return render(request, "article/front/article_titles.html", context=context)

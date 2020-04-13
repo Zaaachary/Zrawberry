@@ -32,6 +32,8 @@
         <li>还没有上传新图片</li>
     {% endif %}
 
+    {% include "common/paginator.html" %}
+
     <h3>上传图片</h3>
     <form action="" method="post" enctype="multipart/form-data" id="form">
         <ul class="errorlist"></ul>

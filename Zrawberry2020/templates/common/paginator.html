@@ -6,9 +6,9 @@
 
 <nav aria-label="Page navigation" class="text-center">
     <ul class="pagination">
-        {% if page.has_previous %}
+        {% if page_obj.has_previous %}
             <li>
-                <a href="?page={{ page.previous_page_number }}" aria-label="Previous">
+                <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -19,15 +19,13 @@
                 </a>
             </li>
         {% endif %}
-        {% for num in paginator.page_range %}
-        {% endfor %}
-        <li><a>第{{ page.number }}页 共{{ page.paginator.num_pages }}页 </a></li>
+        <li><a>第{{ page_obj.number }}页 共{{ page_obj.paginator.num_pages }}页 </a></li>
 
 
 
-        {% if page.has_next %}
+        {% if page_obj.has_next %}
             <li>
-                <a href="?page={{ page.next_page_number }}" aria-label="Next"><span
+                <a href="?page={{ page_obj.next_page_number }}" aria-label="Next"><span
                         aria-hidden="true">&raquo;</span></a>
             </li>
         {% else %}

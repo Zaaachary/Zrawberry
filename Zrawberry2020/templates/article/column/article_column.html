@@ -1,11 +1,11 @@
 {% extends "common/back_base.html" %}
 {% load static %}
+
 {% block title %}文章栏目{% endblock %}
+
 {% block content %}
     <div>
-        <p class="text-right"><!--button class="btn btn-primary">add column</button-->
-            <button id="add_column" onclick="add_column()" class="btn btn-primary">添加栏目</button>
-        </p>
+        <h3>栏目</h3>
         <table class="table table-hover">
             <tr>
                 <td>序号</td>
@@ -29,6 +29,9 @@
                 <p>还没有设置栏目，太懒了。</p>
             {% endfor %}
         </table>
+        <p><!--button class="btn btn-primary">add column</button-->
+            <button id="add_column" onclick="add_column()" class="btn btn-primary">添加栏目</button>
+        </p>
     </div>
 {% endblock %}
 
