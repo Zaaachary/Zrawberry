@@ -18,24 +18,37 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="{{ blog }}"><a href="{% url 'article:article_titles' %}">文章</a></li>
-                {% if dessert %}
-                    <li class="{{ dessert }}"><a href="{% url 'article:dessert' %}">甜品站</a></li>
-                {% endif %}
-                <li class="{{ navigation }}"><a href="{% url 'navigation:navigation_index' %}">网址导航</a></li>
+                <li {% if request.path|slice:"8" == '/article' %}class="active"{% endif %}><a
+                        href="{% url 'article:article_titles' %}">文章</a></li>
+                {#                {% if dessert %}#}
+                {#                    <li class="{{ dessert }}"><a href="{% url 'article:dessert' %}">甜品站</a></li>#}
+                {#                {% endif %}#}
+                <li {% if request.path|slice:"11" == '/navigation' %}class="active"{% endif %}><a
+                        href="{% url 'navigation:navigation_index' %}">网址导航</a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">实验室</a></li>
+                        {% for link in nav_links %}
+                            <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+                        {% empty %}
+                            <li><a href="http://cloud.zrawberry.com">杂物间</a></li>
+                        {% endfor %}
                         <li role="separator" class="divider"></li>
-                        <li class="disabled"><a href="#">关于</a></li>
+                        {% for page in special_page %}
+                            <li><a href="{{ page.get_url_path }}">{{ page.title }}</a></li>
+                        {% empty %}
+                            <li class="disabled"><a href="#">Error!</a></li>
+                        {% endfor %}
+
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                     <li class="dropdown {{ account }}">
-                        <a href="#" class="dropdown-toggle {{ account }}" data-toggle="dropdown" role="button"
+                        <a href="#"
+                           class="dropdown-toggle {% if request.path|slice:"8" == '/account' %}active{% endif %}"
+                           data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false">
                             {{ user.username }} <span class="caret"></span>
                         </a>

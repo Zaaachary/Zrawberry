@@ -27,6 +27,7 @@ def article_column(request):
             "column_form": column_form,
             "column": 'active',
         }
+        context.update(ArticlePost.get_special_page())
         return render(request, "article/column/article_column.html", context=context)
 
     elif request.method == "POST":
@@ -82,6 +83,7 @@ class ArticlePostView(CreateView):
     def get_context_data(self, **kwargs):
         context = super(ArticlePostView, self).get_context_data(**kwargs)
         context['post'] = 'active'
+        context.update(ArticlePost.get_special_page())
         return context
 
     @method_decorator(login_required)
@@ -132,6 +134,7 @@ def article_list(request):
         "page_obj": current_page,
         "list": 'active',
     }
+    context.update(ArticlePost.get_special_page())
     return render(request, "article/column/article_list.html", context=context)
 
 
@@ -188,13 +191,13 @@ def article_titles(request, column_name=None):
     # 获取分类列表
     columns = User.objects.get(id=1).article_column.all()
     context = {
-        "blog": 'active',
         "articles": articles,
         "page_obj": page_obj,
         "columns": columns,
     }
     if column_name:
         context['active'] = column_name
+    context.update(ArticlePost.get_special_page())
     return render(request, "article/front/article_titles.html", context=context)
 
 
@@ -203,7 +206,6 @@ def article_content(request, aid, slug):
     article = get_object_or_404(ArticlePost, id=aid, slug=slug)
     context = {
         "article": article,
-        "blog": 'active',
     }
     # 特殊类型文章
     if article.showtype == '1':
@@ -220,14 +222,13 @@ def article_content(request, aid, slug):
                 return render(request, "404.html")
         else:
             comment_form = CommentForm()
-        context['dessert'] = 'active'
-        del context['blog']
+
         context['form'] = comment_form
 
     if request.user.id != 1:
         article.viewed += 1
     article.save()
-
+    context.update(ArticlePost.get_special_page())
     return render(request, "article/front/article_content.html", context=context)
 
 
@@ -253,11 +254,11 @@ def dessert(request):
     # 获取分类列表
     columns = User.objects.get(id=1).article_column.all()
     context = {
-        "dessert": 'active',
         "articles": articles,
         "page_obj": current_page,
         "columns": columns,
     }
+    context.update(ArticlePost.get_special_page())
     return render(request, "article/front/article_titles.html", context=context)
 
 
@@ -266,3 +267,11 @@ class TimelineView(ListView):
     queryset = User.objects.get(id=1).article.filter(showtype='0').order_by("-created")
     template_name = "article/front/article_timeline.html"
     context_object_name = 'articles'
+
+    def get_context_data(self, **kwargs):
+        context = super(TimelineView, self).get_context_data(**kwargs)
+        context.update(ArticlePost.get_special_page())
+        return context
+
+
+

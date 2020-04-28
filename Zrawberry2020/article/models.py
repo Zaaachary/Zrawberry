@@ -42,7 +42,6 @@ class ArticlePost(models.Model):
     updated = models.DateTimeField(default=timezone.now)
     viewed = models.IntegerField(default=0)
 
-
     # users_like = models.ManyToManyField(User, related_name="articles_like", blank=True)
     # article_tag = models.ManyToManyField(ArticleTag, related_name='article_tag', blank=True)
 
@@ -62,10 +61,17 @@ class ArticlePost(models.Model):
         super(ArticlePost, self).save(*args, **kargs)
 
     def get_absolute_url(self):
+        # 后台的文章页面
         return reverse("article:article_detail", args=[self.id, self.slug])
 
     def get_url_path(self):
         return reverse("article:article_content", args=[self.id, self.slug])
+
+    @classmethod
+    def get_special_page(cls):
+        pages = cls.objects.filter(showtype='2')
+        return {'special_page': pages}
+
 
     @staticmethod
     def is_special_user(user):
