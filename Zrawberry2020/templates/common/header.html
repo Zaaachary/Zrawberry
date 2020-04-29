@@ -20,24 +20,21 @@
             <ul class="nav navbar-nav">
                 <li {% if request.path|slice:"8" == '/article' %}class="active"{% endif %}><a
                         href="{% url 'article:article_titles' %}">文章</a></li>
-                {#                {% if dessert %}#}
-                {#                    <li class="{{ dessert }}"><a href="{% url 'article:dessert' %}">甜品站</a></li>#}
-                {#                {% endif %}#}
                 <li {% if request.path|slice:"11" == '/navigation' %}class="active"{% endif %}><a
                         href="{% url 'navigation:navigation_index' %}">网址导航</a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% for link in nav_links %}
-                            <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+                            <li><a href="{{ link.link }}">{{ link.name }}</a></li>
                         {% empty %}
-                            <li><a href="http://cloud.zrawberry.com">杂物间</a></li>
+                            <li class="disabled"><a href="#">链接 未加载</a></li>
                         {% endfor %}
                         <li role="separator" class="divider"></li>
                         {% for page in special_page %}
                             <li><a href="{{ page.get_url_path }}">{{ page.title }}</a></li>
                         {% empty %}
-                            <li class="disabled"><a href="#">Error!</a></li>
+                            <li class="disabled"><a href="#">特殊页 未加载</a></li>
                         {% endfor %}
 
                     </ul>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ArticleColumn, ArticlePost, Comment, ArticleTag
+from .models import ArticleColumn, ArticlePost, Comment, ArticleTag, Navlink
 
 
 class ArticleColumnAdmin(admin.ModelAdmin):
@@ -22,8 +22,12 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('article', 'created',)
 
 
+class NavlinkAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link')
+
+
 admin.site.register(ArticleColumn, ArticleColumnAdmin)
 admin.site.register(ArticleTag, ArticleTagsAdmin)
 admin.site.register(ArticlePost, ArticlePostAdmin)
 admin.site.register(Comment, CommentAdmin)
-
+admin.site.register(Navlink, NavlinkAdmin)

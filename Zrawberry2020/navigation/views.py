@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 
+from article.views import get_common_context
 from .models import LinkBox
 from .forms import LinkForm
 
@@ -19,6 +20,7 @@ def navigation_list(request):
             'LinkForm': LinkForm,
             'links': 'active',
         }
+        get_common_context(context)
         return render(request, "navigation/back/nav_list.html", context=context)
     elif request.method == "POST":
         if request.POST['op'] == "add_url":
@@ -60,6 +62,7 @@ def navigation_box(request):
             'LBlist': LBlist,
             'boxes': 'active',
         }
+        get_common_context(context)
         return render(request, "navigation/back/nav_box.html", context=context)
     elif request.method == "POST":
         if request.POST['op'] == "add_box":
@@ -87,7 +90,7 @@ def navigation_index(request):
     if request.user.is_authenticated:
         if hasattr(request.user, "LinkBox"):
             context['LBlist'] = request.user.LinkBox.all()
-    context['navigation'] = 'active'
+    get_common_context(context)
     return render(request, "navigation/front/nav_index.html", context=context)
 
 
@@ -106,6 +109,6 @@ class FrontendView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['navigation'] = 'active'
+        get_common_context(context)
         return context
 

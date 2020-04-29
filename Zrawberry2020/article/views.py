@@ -11,9 +11,13 @@ from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 
-from .models import ArticleColumn, ArticlePost, ArticleTag
+from .models import ArticleColumn, ArticlePost, ArticleTag, Navlink
 from .forms import ArticleColumnForm, ArticlePostForm, CommentForm
 
+
+def get_common_context(context):
+    context.update(ArticlePost.get_special_page())
+    context.update(Navlink.get_nav_link())
 
 # @permission_required()
 @login_required
@@ -27,7 +31,7 @@ def article_column(request):
             "column_form": column_form,
             "column": 'active',
         }
-        context.update(ArticlePost.get_special_page())
+        get_common_context(context)
         return render(request, "article/column/article_column.html", context=context)
 
     elif request.method == "POST":
@@ -83,7 +87,7 @@ class ArticlePostView(CreateView):
     def get_context_data(self, **kwargs):
         context = super(ArticlePostView, self).get_context_data(**kwargs)
         context['post'] = 'active'
-        context.update(ArticlePost.get_special_page())
+        get_common_context(context)
         return context
 
     @method_decorator(login_required)
@@ -106,6 +110,7 @@ class ArticleEditView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ArticleEditView, self).get_context_data(**kwargs)
         context['post'] = 'active'
+        get_common_context(context)
         return context
 
     @method_decorator(login_required)
@@ -134,7 +139,7 @@ def article_list(request):
         "page_obj": current_page,
         "list": 'active',
     }
-    context.update(ArticlePost.get_special_page())
+    get_common_context(context)
     return render(request, "article/column/article_list.html", context=context)
 
 
@@ -142,7 +147,9 @@ def article_list(request):
 def article_detail(request, id, slug):
     """从链接中获取文章信息"""
     article = get_object_or_404(ArticlePost, id=id, slug=slug)
-    return render(request, "article/column/article_detail.html", {"article": article})
+    context = {"article":article}
+    get_common_context(context)
+    return render(request, "article/column/article_detail.html", context=context)
 
 
 @login_required()
@@ -197,7 +204,7 @@ def article_titles(request, column_name=None):
     }
     if column_name:
         context['active'] = column_name
-    context.update(ArticlePost.get_special_page())
+    get_common_context(context)
     return render(request, "article/front/article_titles.html", context=context)
 
 
@@ -228,7 +235,7 @@ def article_content(request, aid, slug):
     if request.user.id != 1:
         article.viewed += 1
     article.save()
-    context.update(ArticlePost.get_special_page())
+    get_common_context(context)
     return render(request, "article/front/article_content.html", context=context)
 
 
@@ -258,7 +265,7 @@ def dessert(request):
         "page_obj": current_page,
         "columns": columns,
     }
-    context.update(ArticlePost.get_special_page())
+    get_common_context(context)
     return render(request, "article/front/article_titles.html", context=context)
 
 
@@ -270,7 +277,7 @@ class TimelineView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TimelineView, self).get_context_data(**kwargs)
-        context.update(ArticlePost.get_special_page())
+        get_common_context(context)
         return context
 
 

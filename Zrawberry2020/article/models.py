@@ -89,3 +89,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return "{0}在{1}中发表".format(self.commentator.username, self.article)
+
+
+class Navlink(models.Model):
+    name = models.CharField(max_length=12, verbose_name="链接名")
+    link = models.CharField(max_length=100, default='/article/', verbose_name="链接")
+    show = models.BooleanField(default=True, verbose_name="展示")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_nav_link(cls):
+        nav_links = cls.objects.filter(show=True)
+        return {'nav_links': nav_links}

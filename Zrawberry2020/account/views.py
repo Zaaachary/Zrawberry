@@ -8,6 +8,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from .forms import LoginForm, RegistrationForm, UserProfileForm, UserForm, UserInfoForm
 from .models import UserProfile, UserInfo
 from article.models import ArticlePost
+from article.views import get_common_context
+
+
+def get_common(context):
+    get_common_context(context)
 
 
 def user_login(request):
@@ -28,6 +33,7 @@ def user_login(request):
         context = {
             "form": login_form
         }
+        get_common(context)
         return render(request, "account/login.html", context=context)
 
 
@@ -52,6 +58,7 @@ def register(request):
             "form": user_form,
             "profile": userprofile_form
         }
+        get_common(context)
         return render(request, "account/register.html", context=context)
 
 
@@ -69,6 +76,7 @@ def myself(request):
                "userprofile": userprofile,
                "account": 'active',
                }
+    get_common(context)
     return render(request, "account/myself.html", context=context)
 
 
@@ -114,6 +122,7 @@ def myself_edit(request):
             "userinfo": userinfo,
             "account": 'active',
         }
+        get_common(context)
         return render(request, "account/myself_edit.html", context=context)
 
 
@@ -139,4 +148,5 @@ def dashboard(request):
     #     context["special"] = True
     if request.user.has_perm('article.get_dessert'):
         context["special"] = True
+    get_common(context)
     return render(request, 'common/back_base.html', context=context)
