@@ -1,3 +1,7 @@
+.panel {
+    background: rgba(255,255,255,0.8);
+}
+
 /* fluid 3 columns */
 .grid-sizer {
     width: 32%;

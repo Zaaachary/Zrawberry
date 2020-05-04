@@ -231,6 +231,7 @@ def article_content(request, aid, slug):
             comment_form = CommentForm()
 
         context['form'] = comment_form
+        context['comment'] = True
 
     if request.user.id != 1:
         article.viewed += 1

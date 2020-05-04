@@ -5,25 +5,23 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{% static 'image/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{% static 'image/favicon2.ico' %}" type="image/x-icon"/>
 
     <title>{% block title %}{% endblock %}- 草莓君的妙妙屋</title>
 
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/adjust.css' %}">
-{#    <style>#}
-{#        body{#}
-{#            background: url("{% static 'image/background.jpg' %}");#}
-{#        }#}
-{#    </style>#}
+    <style>
+
+    </style>
     {% block css %}{% endblock %}
 </head>
 <body>
 {% include "common/header.html" %}
 
 <div class="container content">
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 
 {% include "common/footer.html" %}
