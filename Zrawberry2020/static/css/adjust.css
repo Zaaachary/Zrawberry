@@ -23,8 +23,8 @@ html {
     padding: 0;
 }
 
-.navs {
-    background-color: rgba(255, 255, 255, 0.5);
+.navs, .whitergba {
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 body footer {
@@ -54,6 +54,11 @@ body footer {
     body footer {
         margin-top: -186px;
     }
+
+    .article-padding {
+        padding: 0;
+    }
+
 }
 
 @font-face {

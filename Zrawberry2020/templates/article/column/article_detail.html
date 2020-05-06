@@ -7,15 +7,47 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}"/>
-
+    <style>
+        #back-top {
+            background: rgba(255, 255, 255, 0.7);
+            width: 36px;
+            height: 36px;
+            position: fixed;
+            bottom: 40px;
+            right: 10%;
+            border: solid gray;
+            text-align: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+    <div class="btn btn-link"><a href="{% url 'article:redit_article' article.pk article.slug %}" class="link">编辑</a>
+    </div>
+    <div class="btn btn-link"><a href="{{ article.get_url_path }}">访客页</a></div>
+
     <div id='editormd-view'>
         <textarea id="append-test" style="display:none;">
 {{ article.body }}
         </textarea>
     </div>
+{% endblock %}
+
+{% block leftslider %}
+    <div class="list-group">
+        <h3 class="list-group-item">文章信息</h3>
+        <p class="list-group-item">标题：{{ article.title }}</p>
+        <p class="list-group-item">作者：快刀切草莓君</p>
+        {% if article.column %}
+            <p class="list-group-item">分类：{{ article.column }}</p>
+        {% endif %}
+        <p class="list-group-item">发布时间：{{ article.created|date }}</p>
+        <p class="list-group-item">最近编辑：{{ article.updated|date }}</p>
+        <p class="list-group-item">浏览量：{{ article.viewed }}</p>
+    </div>
+    <div id="back-top">↑</div>
 {% endblock %}
 
 {% block javascript %}
@@ -37,6 +69,14 @@
                 flowChart: true,
                 sequenceDiagram: true,
             });
+        });
+        $(function () {
+            $('#back-top').click(function () {
+                $("html, body").animate({
+                    scrollTop: 0,
+                    // screenLeft: 0,
+                }, 400);
+            })
         });
     </script>
 {% endblock %}

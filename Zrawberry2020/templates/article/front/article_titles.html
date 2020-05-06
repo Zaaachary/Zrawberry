@@ -8,39 +8,56 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}">
     <style>
-
+        #back-top {
+            background: rgba(255, 255, 255, 0.7);
+            width: 36px;
+            height: 36px;
+            position: fixed;
+            bottom: 40px;
+            right: 10%;
+            border: solid gray;
+            text-align: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-9">
+    <div class="col-md-9 article-padding">
         <ul class="nav nav-tabs">
-            <form class="navbar-form navbar-right">
+            <form class="navbar-form navbar-right" method="get" action=".">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="搜索文章（尚未实现）">
+                    <input name="search" type="text" class="form-control"
+                           placeholder={% if search %}{{ search }} {% else %}"搜索文章"{% endif %}>
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
-            <li role="presentation" class="active "><a  href="{% url 'article:article_titles' %}">文章列表</a></li>
+            <li role="presentation" class="active "><a href="{% url 'article:article_titles' %}">文章列表</a></li>
             <li role="presentation"><a href="#" class="navs">分类 标签</a></li>
             <li role="presentation"><a href="{% url 'article:timeline' %}" class="navs">归档</a></li>
         </ul>
         {% for article in articles %}
             <div id="markdown{{ forloop.counter }}">
                 <textarea style="display: none">
-{{ article.body|slice:'200' }}...
-
-<p>{% for tag in article.tags.all %}<span class="label label-default">{{ tag.tag }}</span>{% endfor %} <a
-        href="{{ article.get_url_path }}">查看详细内容</a></p>
+{{ article.body|slice:'200' }} <strong><a href="{{ article.get_url_path }}"> 阅读全文</a></strong>
                 </textarea>
+
+            </div>
+            <div class="whitergba text-right">
+                <p>
+                    标签{% for tag in article.tags.all %} {{ tag.tag }}{% empty %} None{% endfor %} |
+                    阅读 ({{ article.viewed }}) |
+                    发布于 {{ article.updated|date }}
+
+                </p>
             </div>
             <div class="mdblock"></div>
-            {#            <hr>#}
         {% endfor %}
         {% include "common/paginator.html" %}
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 article-padding">
         <div class="list-group">
             <h3 class="list-group-item">文章分类</h3>
             <a href="{% url 'article:article_titles' %}"
@@ -58,14 +75,15 @@
             <h3>声明</h3>
             <p>本站系
                 <mark>快刀切草莓君</mark>
-                的个人网站，账号功能目前仅用于存储网址导航。
-            </p>
-            <p>本站的文章仅
+                的个人网站，仅
                 <mark>快刀切草莓君</mark>
-                可发文，其余用户仅可阅读和点赞。
+                可以发表文章。
             </p>
+            <p>评论功能不开放，账号目前仅用于存储网址导航。</p>
         </div>
     </div>
+    <div id="back-top">↑</div>
+
 {% endblock %}
 
 {% block javascript %}
@@ -78,7 +96,17 @@
             for (i = 1; i < 6; i++) {
                 view[i] = editormd.markdownToHTML("markdown" + i, {htmlDecode: true,});
             }
-        })
+        });
+
+        $(function () {
+            $('#back-top').click(function () {
+                $("html, body").animate({
+                    scrollTop: 0,
+                    // screenLeft: 0,
+                }, 400);
+            })
+        });
+
     </script>
 
 {% endblock %}

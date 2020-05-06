@@ -11,14 +11,7 @@
     <link rel="shortcut icon" href="{% static 'image/favicon2.ico' %}" type="image/x-icon"/>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/adjust.css' %}">
-    <style>
-        body {
-            position: relative;
-            background: url("{% static 'image/bg4.png' %}") no-repeat center 0;
-            background-attachment: fixed;
-            background-size: cover;
-        }
-    </style>
+
 
     {% block css %}{% endblock %}
 </head>
@@ -28,26 +21,23 @@
 
 <div class="container content">
     <div class="col-md-9">
-        <div style="background: #FFF;">
+        <div class="whitergba">
             {% block content %}
-                <div class="well-lg">
-                    <h1>妙妙屋欢迎您的到访</h1>
-                    <p>你所在的位置：用户后台</p>
-                    {% if user.is_staff %}
-                        <p>您是管理员用户，可以访问 <a href="/admin/">admin</a>后台</p>
-                    {% endif %}
-
-                    {% if special %}
-                        您是特殊用户，可以访问 <a href="{% url 'article:dessert' %}">甜品站</a> ！
-                    {% endif %}
-
-                </div>
+                <h1>妙妙屋欢迎您的到访</h1>
+                <p>你所在的位置：用户后台</p>
+                {% if user.is_staff %}
+                    <p>您是管理员用户，可以访问 <a href="/admin/">admin</a>后台和<a href="http://bt.zrawberry.com:2020/getin/">宝塔面板</a>。
+                    </p>
+                {% endif %}
             {% endblock %}
         </div>
     </div>
 
     <div class="col-md-3">
         {% include 'common/back_leftslider.html' %}
+        {% block leftslider %}
+
+        {% endblock %}
     </div>
 </div>
 

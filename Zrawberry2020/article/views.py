@@ -167,6 +167,8 @@ def del_article(request):
 
 def article_titles(request, column_name=None):
     articles = User.objects.get(id=1).article.filter(showtype='0')  # 只展示Zachary的
+    if request.GET.get('search', None):
+        articles = articles.filter(title__contains=request.GET['search'])
     # 获取文章列表
     if column_name:
         try:
@@ -201,6 +203,7 @@ def article_titles(request, column_name=None):
         "articles": articles,
         "page_obj": page_obj,
         "columns": columns,
+        "search": request.GET.get('search', None),
     }
     if column_name:
         context['active'] = column_name
