@@ -19,6 +19,7 @@ def get_common_context(context):
     context.update(ArticlePost.get_special_page())
     context.update(Navlink.get_nav_link())
 
+# == 文章栏目 ==
 # @permission_required()
 @login_required
 @csrf_exempt
@@ -73,6 +74,7 @@ def delete_article_column(request):
         return HttpResponse("0")
 
 
+# == 文章编辑 ==
 class ArticlePostView(CreateView):
     """文章发布"""
     model = ArticlePost
@@ -81,7 +83,11 @@ class ArticlePostView(CreateView):
     template_name = 'article/column/article_post.html'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        if self.request.user.has_perm('article.post_article'):
+            # 只有拥有发布权限才指定 user
+            form.instance.author = self.request.user
+        else:
+            raise Http404("Poll does not exist")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -166,7 +172,8 @@ def del_article(request):
 
 
 def article_titles(request, column_name=None):
-    articles = User.objects.get(id=1).article.filter(showtype='0')  # 只展示Zachary的
+    # articles = User.objects.get(id=1).article.filter(showtype='0')  # 只展示Zachary的
+    articles = ArticlePost.objects.filter(showtype='0')
     if request.GET.get('search', None):
         articles = articles.filter(title__contains=request.GET['search'])
     # 获取文章列表
@@ -198,7 +205,8 @@ def article_titles(request, column_name=None):
         articles = page_obj.object_list
 
     # 获取分类列表
-    columns = User.objects.get(id=1).article_column.all()
+    # columns = User.objects.get(id=1).article_column.all()
+    columns = ArticleColumn.objects.all()
     context = {
         "articles": articles,
         "page_obj": page_obj,
@@ -247,7 +255,8 @@ def article_content(request, aid, slug):
 @permission_required('article.get_dessert', raise_exception=True)
 def dessert(request):
     """甜品站titles"""
-    articles = User.objects.get(id=1).article.filter(showtype='1')
+    # articles = User.objects.get(id=1).article.filter(showtype='1')
+    articles = ArticlePost.objects.filter(showtype='1')
 
     articles_title = articles.filter(targetuser=request.user)
     paginator = Paginator(articles_title, 3)
@@ -263,7 +272,8 @@ def dessert(request):
         current_page = paginator.page(paginator.num_pages)
         articles = current_page.object_list
     # 获取分类列表
-    columns = User.objects.get(id=1).article_column.all()
+    # columns = User.objects.get(id=1).article_column.all()
+    columns = ArticleColumn.objects.all()
     context = {
         "articles": articles,
         "page_obj": current_page,
@@ -275,8 +285,7 @@ def dessert(request):
 
 class TimelineView(ListView):
     model = ArticlePost
-    # queryset = User.objects.get(id=1).article.filter(showtype='0').order_by("-created")
-    queryset = ArticlePost.objects.filter(showtype='0')     # migrate的时候注释掉
+    queryset = ArticlePost.objects.filter(showtype='0').order_by("-created")
     template_name = "article/front/article_timeline.html"
     context_object_name = 'articles'
 
@@ -284,6 +293,3 @@ class TimelineView(ListView):
         context = super(TimelineView, self).get_context_data(**kwargs)
         get_common_context(context)
         return context
-
-
-

@@ -50,6 +50,7 @@ class ArticlePost(models.Model):
         index_together = (('id', 'slug'),)  # 使用两个字段建立索引 加快读取速度
         permissions = (
             ("get_dessert", "可以进入甜品站，查看以自己为对象的文章。"),
+            ("post_article", "发布或者编辑文章"),
         )
 
     def __str__(self):
@@ -71,11 +72,6 @@ class ArticlePost(models.Model):
     def get_special_page(cls):
         pages = cls.objects.filter(showtype='2')
         return {'special_page': pages}
-
-
-    @staticmethod
-    def is_special_user(user):
-        return user in [1, 11, 14]
 
 
 class Comment(models.Model):
