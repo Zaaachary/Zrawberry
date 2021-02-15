@@ -276,6 +276,7 @@ def dessert(request):
 class TimelineView(ListView):
     model = ArticlePost
     queryset = User.objects.get(id=1).article.filter(showtype='0').order_by("-created")
+    # queryset = ArticlePost.objects.filter(showtype='0')     # migrate的时候注释掉
     template_name = "article/front/article_timeline.html"
     context_object_name = 'articles'
 
