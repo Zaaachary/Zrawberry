@@ -3,6 +3,9 @@
 *.sqlite3
 .idea
 .vscode
-migrations/*
+migrations
 settings.py
 media/
+
+static/
+__pycache__
