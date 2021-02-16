@@ -20,6 +20,7 @@
 
 增加 sitemaps，为百度谷歌等搜索引擎提供更好的文章索引。 参考资料 [django官方文档](https://docs.djangoproject.com/en/3.1/ref/contrib/sitemaps/#django.contrib.sitemaps.Sitemap.changefreq)
 
+完善权限系统 解除id=1这样的写法
 
 
 ## 网站历史
@@ -28,8 +29,6 @@
 2. 2018年夏用django1.x开发的仅登录功能的版本 V1.0
 3. 2019年夏考研期间写的单独的blog系统 V1.5
 4. 2020年春整合了博客、账号、网址导航 V2.0
-
-
 
 
 ### V2.6.2 (当前版本)
