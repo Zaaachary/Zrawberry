@@ -30,7 +30,11 @@
                             <td><a href="{{ url }}">{{ url }}</a></td>
                             <td>
                                 <a name="delete" href="javascript:" onclick="del_url(this, {{ LB.id }})">
-                                    <span class="glyphicon glyphicon-trash"></span></a>
+                                <span class="glyphicon glyphicon-trash"></span>
+                                </a>&nbsp
+                                <a name="update" href="javascript:" onclick="update_url(this, {{ LB.id }})">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -94,5 +98,42 @@
                 },
             })
         }
+
+
+
+        function update_url(current, boxid) {
+            var sitename = $(current).parents('tr').children('td').eq(1).text();
+            var link = $(current).parents('tr').children('td').eq(2).text();
+            var index = layer.open({
+                type: 1,
+                skin: "layui-layer-rim",
+                area: ["400px", "300px"],
+                title: "修改站点",
+                content: '<div class="text-center" style="margin-top:20px"> ' +
+                    '<label>{{ LinkForm.sitename.label }}</label> ' +
+                    '<p><input type="text" name="sitename" required="True" value="'+ sitename +'" id="id_sitename"></p>' +
+                    '<label>{{ LinkForm.url.label }}</label>' +
+                    '<p><input type="url" name="url" required="" value="'+ link + '" id="id_url"></p></div>',
+                btn: ['修改', '取消'],
+                yes: function (index, layero) {
+                    new_sitename = $('#id_sitename').val();
+                    siteurl = $('#id_url').val();
+                    $.ajax({
+                        url: '{% url "navigation:navigation_list" %}',
+                        type: 'POST',
+                        data: {"op": "update_url", "box_id": boxid, "old_sitename": sitename, "new_sitename": new_sitename, "url": siteurl},
+                        success: function (e) {
+                            if (e == "1") {
+                                parent.location.reload();
+                                layer.msg("修改成功");
+                            } else {
+                                layer.msg("修改失败")
+                            }
+                        },
+                    });
+                },
+            });
+        }
+
     </script>
 {% endblock %}

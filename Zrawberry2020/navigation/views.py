@@ -51,6 +51,24 @@ def navigation_list(request):
                 return HttpResponse("1")
             except:
                 return HttpResponse("2")
+        elif request.POST['op'] == 'update_url':
+            # 修改链接
+            box_id = request.POST['box_id']
+            old_sitename = request.POST['old_sitename']
+            new_sitename = request.POST['new_sitename']
+            new_link = request.POST['url']
+            box = LinkBox.objects.get(owner_id=request.user.id, id=box_id)
+            urldict = box.str2dict()
+            if old_sitename in urldict:
+                del urldict[old_sitename]
+                urldict[new_sitename] = new_link
+                box.urls = LinkBox.dict_jsontr(urldict)
+                box.save()
+                return HttpResponse("1")
+            else:
+                return HttpResponse("2")
+        else:
+            return HttpResponse("2")
 
 
 @login_required
@@ -83,7 +101,19 @@ def navigation_box(request):
                 return HttpResponse("1")
             except:
                 return HttpResponse("2")
-
+        elif request.POST['op'] == "update_box":
+            # 修改盒子名称
+            box_id = request.POST['boxid']
+            boxname = request.POST['boxname']
+            if type(boxname) is str and len(boxname)>0:
+                box = LinkBox.objects.get(owner_id=request.user.id, id=box_id)
+                box.boxname=boxname
+                box.save()
+                return HttpResponse('1')
+            else:
+                return HttpResponse('2')
+        else:
+            return HttpResponse("2")
 
 def navigation_index(request):
     context = {}
