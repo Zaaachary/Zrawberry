@@ -12,7 +12,7 @@ pylint==2.6.0
 pytz==2018.9
 regex==2020.1.8
 six==1.15.0
-sqlparse==0.3.0
+sqlparse==0.4.4
 toml==0.10.1
 typed-ast==1.4.1
 Unidecode==0.4.21
